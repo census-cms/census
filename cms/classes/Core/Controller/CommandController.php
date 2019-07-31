@@ -29,6 +29,11 @@ abstract class CommandController
      */
     protected $request = [];
 
+	/**
+	 * @var \CENSUS\Core\Application
+	 */
+    private $application = null;
+
     /**
      * @var array
      */
@@ -46,13 +51,15 @@ abstract class CommandController
      * @param string $action
      * @param array $configuration
      * @param array $request
+	 * @param \CENSUS\Core\Application
      */
-    public function __construct($command, $action, $configuration, $request)
+    public function __construct($command, $action, $configuration, $request, $application)
     {
         $this->command = $command;
         $this->action = $action;
         $this->configuration = $configuration;
         $this->request = $request;
+        $this->application = $application;
 
         $this->initializeAction();
     }
@@ -100,4 +107,31 @@ abstract class CommandController
             $this->$actionMethodName();
         }
     }
+
+	/**
+	 * Get the application
+	 *
+	 * @return \CENSUS\Core\Application
+	 */
+    public function getApplication()
+	{
+		return $this->application;
+	}
+
+	/**
+	 * Http redirect
+	 *
+	 * $location can be a string or an array with params[param1=foo, param2=bar]
+	 *
+	 * @param array|string $location
+	 * @param int $response
+	 */
+	public function redirect($location, $response = 301)
+	{
+		if (is_array($location)) {
+			$location = '?' . implode('&', $location);
+		}
+
+		header('Location: ' . $location, true, $response);
+	}
 }

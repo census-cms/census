@@ -6,6 +6,6 @@ class DashboardController extends CommandController
 {
     protected function overviewAction()
     {
-        echo 'dashboard controller => overview action';
+        $this->view->render('overview.html');
     }
 }

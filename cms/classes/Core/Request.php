@@ -39,6 +39,7 @@ class Request
 	 *
 	 * @param \CENSUS\Core\Application $application
 	 * @param \CENSUS\Core\Configuration $configuration
+	 * @throws \CENSUS\Core\Exception
 	 */
     public function __construct($application, $configuration)
     {
@@ -91,14 +92,15 @@ class Request
                 $this->command,
                 $this->action,
                 $this->configuration,
-                $this->request
+                $this->request,
+				$this->application
             );
         }
     }
 
     private function setDefaultCommandAndAction()
 	{
-		if (false === $this->application->getIsAuthenticated()) {
+		if (true !== $this->application->getIsAuthenticated()) {
 			$this->command = 'authentication';
 			$this->action = 'login';
 		}

@@ -6,10 +6,12 @@ class AuthenticationController extends CommandController
 {
     /**
      * @var \CENSUS\Core\Authentication
-     * @Inject
      */
     private $authentication = null;
 
+	/**
+	 * User login
+	 */
     protected function loginAction()
     {
         if (
@@ -22,8 +24,19 @@ class AuthenticationController extends CommandController
             )
         ) {
             $this->authentication = new \CENSUS\Core\Authentication($this->request);
+
+            $this->redirect('/backend/');
         }
 
         $this->view->render('login.html');
     }
+
+	/**
+	 * User logout
+	 */
+    protected function logoutAction()
+	{
+		$this->getApplication()->initializeLogout();
+		$this->redirect('/backend/');
+	}
 }

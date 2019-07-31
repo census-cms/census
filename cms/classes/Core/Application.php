@@ -52,7 +52,11 @@ class Application
      */
 	private function initialize($baseDir)
 	{
-        $this->session = new \CENSUS\Core\Session();
+		$this->session = new \CENSUS\Core\Session();
+
+		$this->startOutputBuffering();
+
+		$this->isAuthenticated = $this->session->isAuthenticated();
 
 		$this->configuration = new \CENSUS\Core\Configuration($this);
 		$this->configuration->initializeConfiguration($baseDir);
@@ -60,7 +64,7 @@ class Application
 		$this->fileBase = new \CENSUS\Core\FileBase($this->configuration->getConfigByKey('pagetreeRoot'));
 		$this->request = new \CENSUS\Core\Request($this, $this->configuration->getConfig());
 
-        $this->isAuthenticated = $this->session->isAuthenticated();
+        $this->flushOutputBuffering();
 
         echo '<pre>';
         var_dump($this->session);
@@ -73,6 +77,23 @@ class Application
 	public function setClassLoader($classLoader)
 	{
 		$this->classLoader = $classLoader;
+	}
+
+	/**
+	 * Start the output buffering
+	 */
+	private function startOutputBuffering()
+	{
+		ob_start();
+	}
+
+	/**
+	 * Flush the output buffering
+	 */
+	private function flushOutputBuffering()
+	{
+		ob_flush();
+		ob_clean();
 	}
 
 	/**
@@ -103,5 +124,13 @@ class Application
 	public function getIsAuthenticated()
 	{
 		return $this->isAuthenticated;
+	}
+
+	/**
+	 * Initialize the logout command
+	 */
+	public function initializeLogout()
+	{
+		$this->session->logout();
 	}
 }

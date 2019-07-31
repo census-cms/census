@@ -17,6 +17,13 @@ class Authentication
      */
     private $request = null;
 
+	/**
+	 * Login time (timestamp)
+	 *
+	 * @var int
+	 */
+    private $loginTime = 0;
+
     /**
      * Authentication failed
      *
@@ -37,6 +44,8 @@ class Authentication
         }
 
         $this->request = $request;
+        $this->loginTime = time();
+
         $auth = $this->authenticate();
 
         if (true === $this->isValid) {
@@ -51,20 +60,13 @@ class Authentication
      *
      * @return array|bool
      */
-    protected function authenticate()
+    private function authenticate()
     {
-        $userName = $this->request->getArgument('user');
-        $userDataFile = $this->userDir . $userName . '.php';
-
-        if (!file_exists($userDataFile)) {
-            return false;
-        }
-
-        $userData = require_once $userDataFile;
+        $userData = $this->getUserData();
 
         if (
             $userData['name'] == $this->request->getArgument('user') &&
-            $userData['ptoken'] == $this->request->getArgument('password')
+            true === $this->verifyPassword($userData['ptoken'])
         ) {
             $this->isValid = true;
 
@@ -72,23 +74,82 @@ class Authentication
                 'name' => $userData['name'],
                 'role' => (true === $userData['admin']) ? 'admin' : $userData['role'],
                 'data' => $userData['data'],
-                'login' => time()
+                'login' => $this->loginTime,
+				'identifier' => $this->getNewIdentifier()
             ];
 
             unset($userData);
 
             return $sessionData;
         }
+
+        return false;
     }
 
+	/**
+	 * Verify the password
+	 *
+	 * @param string $password
+	 * @return bool
+	 */
+    private function verifyPassword($password)
+	{
+		$password = $this->request->getArgument('password');
+
+		// must be copied also into the user create
+		$hash = password_hash($password, PASSWORD_ARGON2I, ['memory_cost' => 2048, 'time_cost' => 4, 'threads' => 3]);
+
+		// this is the password verify
+		return password_verify($password, $hash);
+	}
+
+	/**
+	 * Get the user data
+	 *
+	 * @return bool|array
+	 */
+    private function getUserData()
+	{
+		$userName = $this->request->getArgument('user');
+		$userDataFile = $this->userDir . $userName . '.php';
+
+		if (!file_exists($userDataFile)) {
+			return false;
+		}
+
+		return require_once $userDataFile;
+	}
+
+	/**
+	 * Get a new identifier for the session
+	 *
+	 * @return string
+	 */
+	private function getNewIdentifier()
+	{
+		return hash('sha256', $this->loginTime . $_SERVER['REMOTE_ADDR']);
+	}
+
+	public function getIsValid()
+	{
+		return $this->isValid;
+	}
+
+	/**
+	 * Set the session variable with data
+	 *
+	 * @param $sessionData
+	 */
     private function setSession($sessionData)
     {
         $_SESSION['censuscms'] = $sessionData;
     }
 
+	/**
+	 * Leaving authentication
+	 */
     public function __destruct()
     {
         $this->request = null;
-        header('Location: /backend/');
     }
 }
