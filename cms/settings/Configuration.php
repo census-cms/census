@@ -8,6 +8,7 @@
 
 define('BASE_DIR', $baseDir);
 define('CONFIG_DIR', __DIR__);
+define('STORAGE_DIR', $baseDir . '/storage');
 define('TEMPLATE_DIR', CONFIG_DIR . '/../templates/');
 
 return [

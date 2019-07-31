@@ -4,7 +4,6 @@ if (version_compare(PHP_VERSION, '7.2.0', '<')) {
 }
 
 call_user_func(function () {
-	var_dump(__DIR__);
 	$classLoader = require '../../vendor/autoload.php';
 
     chdir('../');
