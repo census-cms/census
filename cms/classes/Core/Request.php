@@ -1,0 +1,162 @@
+<?php
+namespace CENSUS\Core;
+
+class Request
+{
+    /**
+     * @var \CENSUS\Model\Request
+     */
+    private $request = null;
+
+    /**
+     * Requested command
+     *
+     * @var string|null
+     */
+    private $command = null;
+
+    /**
+     * Requested action
+     *
+     * @var null
+     */
+    private $action = null;
+
+	/**
+	 * @var \CENSUS\Core\Application
+	 */
+    private $application = null;
+
+	/**
+	 * Configuration array
+	 *
+	 * @var array
+	 */
+    private $configuration = [];
+
+	/**
+	 * Request constructor
+	 *
+	 * @param \CENSUS\Core\Application $application
+	 * @param \CENSUS\Core\Configuration $configuration
+	 */
+    public function __construct($application, $configuration)
+    {
+    	$this->application = $application;
+        $this->configuration = $configuration;
+
+        $this->initializeRequest();
+        $this->initializeCommandAndAction();
+
+        $this->handleRequest();
+    }
+
+    /**
+     * Initializes the request
+     */
+    private function initializeRequest()
+    {
+        $this->request = new \CENSUS\Model\Request();
+
+        $this->request->setParams($_GET);
+        $this->request->setArguments($_REQUEST);
+    }
+
+    /**
+     * Initializes the command
+     */
+    private function initializeCommandAndAction()
+    {
+        $this->command = ($this->request->hasArgument('cmd')) ? $this->request->getArgument('cmd') : null;
+        $this->action = ($this->request->hasArgument('action')) ? $this->request->getArgument('action') : null;
+    }
+
+    /**
+     * Handles the request
+     * and makes an instance of the
+     * requested command controller
+	 *
+	 * @throws \Exception
+     */
+    private function handleRequest()
+    {
+		$this->validateRequest();
+		$this->setDefaultCommandAndAction();
+
+        $requestedCommandControllerName = ucfirst($this->command) . 'Controller';
+        $requestedCommandControllerClass = '\\CENSUS\\Core\\Controller\\' . $requestedCommandControllerName;
+
+        if (class_exists($requestedCommandControllerClass)) {
+            new $requestedCommandControllerClass(
+                $this->command,
+                $this->action,
+                $this->configuration,
+                $this->request
+            );
+        }
+    }
+
+    private function setDefaultCommandAndAction()
+	{
+		if (false === $this->application->getIsAuthenticated()) {
+			$this->command = 'authentication';
+			$this->action = 'login';
+		}
+
+		/*
+		 * by default, the dashboard is loaded if no command is set
+		 */
+		if (null == $this->command) {
+			$this->command = 'dashboard';
+		}
+	}
+
+	/**
+	 * Validate the request
+	 *
+	 * @throws \CENSUS\Core\Exception
+	 * @todo add more validation
+	 */
+    private function validateRequest()
+    {
+        if (null !== $this->command) {
+            if ($commandWhitelistArray = $this->configuration['cms']['controllerAction']) {
+                if (!array_key_exists($this->command, $commandWhitelistArray)) {
+                    throw new \CENSUS\Core\Exception('Command ' . $this->command . ' is not allowed', \CENSUS\Core\Exception::ERR_NOT_ALLOWED);
+                }
+            } else {
+                throw new \CENSUS\Core\Exception('Configuration error', \CENSUS\Core\Exception::ERR_ABORT);
+            }
+        }
+    }
+
+    /**
+     * Get the request
+     *
+     * @return \CENSUS\Model\Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Get the current command
+     *
+     * @return string|null
+     */
+    public function getCommand()
+    {
+        return $this->command;
+    }
+
+    /**
+     * Get the current action
+     *
+     * @return null
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+}

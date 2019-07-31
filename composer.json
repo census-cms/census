@@ -1,0 +1,37 @@
+{
+	"name": "censuscms/cms",
+	"description": "census CMS source",
+	"license": "GPL-2.0+",
+	"authors": [
+		{
+			"name": "Andreas Reichel",
+			"email": "andy@census.systems"
+		},
+		{
+			"name": "Marc Scherer",
+			"email": "marc@census.systems"
+		}
+	],
+	"type": "package",
+	"require": {
+		"twig/twig": "^2.11"
+	},
+	"require-dev": {
+	},
+	"autoload": {
+		"psr-4": {
+			"CENSUS\\Core\\": "cms/classes/Core",
+			"CENSUS\\Model\\": "cms/classes/Model",
+			"CENSUS\\View\\": "cms/classes/View"
+		}
+	},
+	"repositories": [
+		{
+			"type": "path",
+			"url": "backend",
+			"options": {
+				"symlink": true
+			}
+		}
+	]
+}
