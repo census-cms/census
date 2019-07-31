@@ -5,7 +5,6 @@ namespace CENSUS\Core;
  * Class Authentication
  *
  * @package CENSUS\Core
- * @todo implement a secure password authentication (salted, hash password with JS on keyup, compare hashed passwords)
  * @todo add counter for wrong user/password requests and set session to deniy authentication for n:seconds
  */
 class Authentication
