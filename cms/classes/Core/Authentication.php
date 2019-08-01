@@ -93,10 +93,8 @@ class Authentication
 	 */
     private function verifyPassword($password)
 	{
-		$password = $this->request->getArgument('password');
-
 		// must be copied also into the user create
-		$hash = password_hash($password, PASSWORD_ARGON2I, ['memory_cost' => 2048, 'time_cost' => 4, 'threads' => 3]);
+		$hash = password_hash($this->request->getArgument('password'), PASSWORD_ARGON2I, ['memory_cost' => 2048, 'time_cost' => 4, 'threads' => 3]);
 
 		// this is the password verify
 		return password_verify($password, $hash);
