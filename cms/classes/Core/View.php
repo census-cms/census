@@ -31,6 +31,7 @@ class View
     /**
      * @param string $templateFile
      * @param array $arguments
+	 * @return void
      */
     public function render($templateFile, $arguments = [])
     {

@@ -17,7 +17,8 @@ return [
     'cms' => [
         'controllerAction' => [
             'authentication' => [
-                'login'
+                'login',
+				'logout'
             ],
             'dashboard' => [
                 'overview'
@@ -31,5 +32,8 @@ return [
     ],
     'session' => [
         'expires' => '3600*2'
-    ]
+    ],
+	'security' => [
+		'salt' => ''
+	]
 ];

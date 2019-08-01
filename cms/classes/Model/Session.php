@@ -36,6 +36,7 @@ class Session
      * Login tinestamp
      *
      * @var int
+	 * @throws \CENSUS\Core\Exception
      */
     private $loginTime = 0;
 
@@ -44,7 +45,7 @@ class Session
         list ($class, $caller) = debug_backtrace(false, 2);
 
         if ($caller['class'] !== 'CENSUS\Core\Session') {
-            throw new \Exception('Access to session data model is restricted', 1103);
+            throw new \CENSUS\Core\Exception('Access to session data model is restricted', \CENSUS\Core\Exception::ERR_NOT_ALLOWED);
         }
 
         if (isset($_SESSION['censuscms'])) {

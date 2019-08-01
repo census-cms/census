@@ -14,8 +14,7 @@ class Session
      */
     public function __construct()
     {
-        session_start();
-
+		//session_destroy();
         $this->initializeSession();
 
         return $this->getSession();
@@ -26,6 +25,16 @@ class Session
      */
     private function initializeSession()
     {
+    	if (empty(session_id())) {
+    		unset($_SESSION['censuscms']);
+		}
+
+		//$domain = isset($domain) ? $domain : isset($_SERVER['SERVER_NAME']);
+
+		//session_set_cookie_params(0, '/', $domain, $domain, true);
+
+		session_start();
+
         $this->session = new \CENSUS\Model\Session();
     }
 
@@ -49,6 +58,8 @@ class Session
             if ($this->session->getLoginTime() < (time() - 3600*2)) {
                 $this->logout();
             }
+
+            return true;
         }
     }
 

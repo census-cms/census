@@ -55,12 +55,12 @@ class FileBase
 	/**
 	 * Validate the current path by matching some restrictions
 	 *
-	 * @throws \Exception
+	 * @throws \CENSUS\Core\Exception
 	 */
 	private function _validatePagePath()
 	{
 		if (!is_dir($this->currentPagePath)) {
-			throw new \Exception('Page ('. $this->currentPagePath .') does not exist.', 1104);
+			throw new \CENSUS\Core\Exception('Page ('. $this->currentPagePath .') does not exist.', \CENSUS\Core\Exception::ERR_NOT_FOUND);
 		}
 
 		// @todo do some more validation about: meta exists? content exists?
