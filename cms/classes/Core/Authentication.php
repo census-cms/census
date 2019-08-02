@@ -37,11 +37,9 @@ class Authentication
      */
     private $errors = [];
 
-    /**
-     * Authentication constructor
-     *
-     * @throws \CENSUS\Core\Exception
-     */
+	/**
+	 * Authentication constructor
+	 */
     public function __construct()
     {
         $this->errors = [];
