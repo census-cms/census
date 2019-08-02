@@ -64,11 +64,26 @@ class Application
 		$this->fileBase = new \CENSUS\Core\FileBase($this->configuration->getConfigByKey('pagetreeRoot'));
 		$this->request = new \CENSUS\Core\Request($this, $this->configuration->getConfig());
 
+		$this->initializeController();
+
         $this->flushOutputBuffering();
 
         echo '<pre>';
         var_dump($this->session);
         echo '</pre>';
+	}
+
+	private function initializeController()
+	{
+		$requestedCommandControllerName = ucfirst($this->request->getCommand()) . 'Controller';
+		$requestedCommandControllerClass = '\\CENSUS\\Core\\Controller\\' . $requestedCommandControllerName;
+
+		if (class_exists($requestedCommandControllerClass)) {
+			new $requestedCommandControllerClass(
+				$this->request->getRequest(),
+				$this
+			);
+		}
 	}
 
 	/**
@@ -124,6 +139,26 @@ class Application
 	public function getIsAuthenticated()
 	{
 		return $this->isAuthenticated;
+	}
+
+	/**
+	 * Get the current command
+	 *
+	 * @return string|null
+	 */
+	public function getCommand()
+	{
+		return $this->request->getCommand();
+	}
+
+	/**
+	 * Get the current action
+	 *
+	 * @return null
+	 */
+	public function getAction()
+	{
+		return $this->request->getAction();
 	}
 
 	/**

@@ -77,25 +77,12 @@ class Request
      * and makes an instance of the
      * requested command controller
 	 *
-	 * @throws \Exception
+	 * @throws \CENSUS\Core\Exception
      */
     private function handleRequest()
     {
 		$this->validateRequest();
 		$this->setDefaultCommandAndAction();
-
-        $requestedCommandControllerName = ucfirst($this->command) . 'Controller';
-        $requestedCommandControllerClass = '\\CENSUS\\Core\\Controller\\' . $requestedCommandControllerName;
-
-        if (class_exists($requestedCommandControllerClass)) {
-            new $requestedCommandControllerClass(
-                $this->command,
-                $this->action,
-                $this->configuration,
-                $this->request,
-				$this->application
-            );
-        }
     }
 
     private function setDefaultCommandAndAction()

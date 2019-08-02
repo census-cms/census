@@ -47,19 +47,17 @@ abstract class CommandController
     /**
      * CommandController constructor
      *
-     * @param string $command
-     * @param string $action
-     * @param array $configuration
      * @param array $request
 	 * @param \CENSUS\Core\Application
      */
-    public function __construct($command, $action, $configuration, $request, $application)
+    public function __construct($request, $application)
     {
-        $this->command = $command;
-        $this->action = $action;
-        $this->configuration = $configuration;
         $this->request = $request;
         $this->application = $application;
+
+		$this->configuration = $this->application->getConfiguration();
+		$this->command = $this->application->getCommand();
+		$this->action = $this->application->getAction();
 
         $this->initializeAction();
     }
