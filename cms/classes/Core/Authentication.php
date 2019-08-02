@@ -50,7 +50,7 @@ class Authentication
 	 * @return bool
 	 * @throws \CENSUS\Core\Exception
 	 */
-    public function initializeAuthentication($request)
+    public function authenticationRequest($request)
     {
         if (!($request instanceof \CENSUS\Model\Request)) {
             throw new \CENSUS\Core\Exception('Validation error, invalid Request', \CENSUS\Core\Exception::ERR_INVALID);
@@ -82,30 +82,21 @@ class Authentication
      */
     private function authenticate()
     {
-        $userData = $this->getUserData();
+        $localUserData = $this->getUserData();
 
         if (
-            $userData['name'] == $this->request->getArgument('user') &&
+			$localUserData['name'] == $this->request->getArgument('user') &&
             true === $this->verifyPassword($this->request->getArgument('password'))
         ) {
+        	unset ($localUserData['ptoken']);
+
             $this->setIsValid(true);
-
-            $sessionData = [
-                'name' => $userData['name'],
-                'role' => (true === $userData['admin']) ? 'admin' : $userData['role'],
-                'data' => $userData['data'],
-                'login' => $this->loginTime,
-				'identifier' => $this->getHash($this->loginTime . $_SERVER['REMOTE_ADDR'])
-            ];
-
-            unset($userData);
-
-			$this->setSessionData($sessionData);
-
-			unset($sessionData);
+			$this->setSessionData($localUserData);
         } else {
             $this->addError('authenticationError', true);
         }
+
+		unset ($localUserData);
 
         return false;
     }
@@ -195,10 +186,18 @@ class Authentication
 	/**
 	 * Set the session variable with data
 	 *
-	 * @param array $sessionData
+	 * @param array $userData
 	 */
-    private function setSessionData($sessionData)
+    private function setSessionData($userData)
     {
-        $_SESSION['censuscms'] = $sessionData;
+        $_SESSION['censuscms'] = [
+			'name' => $userData['name'],
+			'role' => (true === $userData['admin']) ? 'admin' : $userData['role'],
+			'data' => $userData['data'],
+			'login' => $this->loginTime,
+			'identifier' => $this->getHash($this->loginTime . $_SERVER['REMOTE_ADDR'])
+		];
+
+        unset($userData);
     }
 }

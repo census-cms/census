@@ -25,7 +25,7 @@ class AuthenticationController extends CommandController
                 !empty($this->request->getArgument('password'))
             )
         ) {
-            if (true === $this->authentication->initializeAuthentication($this->request)) {
+            if (true === $this->authentication->authenticationRequest($this->request)) {
                 $this->redirect('/backend/');
             }
         }
@@ -34,7 +34,7 @@ class AuthenticationController extends CommandController
             'login.html',
             [
                 'timestamp' => time(),
-                'valid' => $this->authentication,
+                'valid' => $this->authentication->getIsValid(),
                 'errors' => $this->authentication->getErrors()
             ]
         );
