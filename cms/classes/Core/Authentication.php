@@ -31,27 +31,52 @@ class Authentication
     private $isValid = false;
 
     /**
+     * Error
+     *
+     * @var array
+     */
+    private $errors = [];
+
+    /**
      * Authentication constructor
      *
-     * @param $request
      * @throws \CENSUS\Core\Exception
      */
-    public function __construct($request)
+    public function __construct()
+    {
+        $this->errors = [];
+    }
+
+    public function initializeAuthentication($request)
     {
         if (!($request instanceof \CENSUS\Model\Request)) {
             throw new \CENSUS\Core\Exception('Validation error, invalid Request', \CENSUS\Core\Exception::ERR_INVALID);
         }
 
         $this->request = $request;
-        $this->loginTime = time();
+        $this->loginTime = $this->request->getArgument('timestamp');
 
-        $auth = $this->authenticate();
+        $this->validateFormRequest();
 
-        if (true === $this->isValid) {
+        $auth = (empty($this->getErrors())) ? $this->authenticate() : [];
+
+        if (true === $this->getIsValid()) {
             $this->setSession($auth);
         }
 
-        return $this->isValid;
+        return $this->getIsValid();
+    }
+
+    /**
+     * Validate the form request
+     *
+     * @return bool
+     */
+    private function validateFormRequest()
+    {
+        if ($this->loginTime < (time() - (600))) {
+            $this->errors['timeoutError'] = true;
+        }
     }
 
     /**
@@ -65,21 +90,23 @@ class Authentication
 
         if (
             $userData['name'] == $this->request->getArgument('user') &&
-            true === $this->verifyPassword($userData['ptoken'])
+            true === $this->verifyPassword($this->request->getArgument('password'))
         ) {
-            $this->isValid = true;
+            $this->setIsValid(true);
 
             $sessionData = [
                 'name' => $userData['name'],
                 'role' => (true === $userData['admin']) ? 'admin' : $userData['role'],
                 'data' => $userData['data'],
                 'login' => $this->loginTime,
-				'identifier' => $this->getNewIdentifier()
+				'identifier' => $this->getHash($this->loginTime . $_SERVER['REMOTE_ADDR'])
             ];
 
             unset($userData);
 
             return $sessionData;
+        } else {
+            $this->addError('authenticationError', true);
         }
 
         return false;
@@ -108,7 +135,7 @@ class Authentication
     private function getUserData()
 	{
 		$userName = $this->request->getArgument('user');
-		$userDataFile = $this->userDir . $userName . '.php';
+		$userDataFile = $this->userDir . $this->getHash($userName) . '.php';
 
 		if (!file_exists($userDataFile)) {
 			return false;
@@ -118,19 +145,54 @@ class Authentication
 	}
 
 	/**
-	 * Get a new identifier for the session
+	 * Get a hash
 	 *
+     * @param string $string
 	 * @return string
 	 */
-	private function getNewIdentifier()
+	private function getHash($string)
 	{
-		return hash('sha256', $this->loginTime . $_SERVER['REMOTE_ADDR']);
+		return hash('sha256', $string);
 	}
 
+    /**
+     * Set user authentication valid state
+     * @param bool $isValid
+     */
+	private function setIsValid($isValid)
+    {
+        $this->isValid = $isValid;
+    }
+    /**
+     * Get user authentication valid state
+     *
+     * @return bool
+     */
 	public function getIsValid()
 	{
 		return $this->isValid;
 	}
+
+    /**
+     * Add error
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+	private function addError($key, $value)
+    {
+        $this->errors[$key] = $value;
+    }
+
+    /**
+     * Get the errors
+     *
+     * @return array
+     */
+	public function getErrors()
+    {
+        return $this->errors;
+    }
 
 	/**
 	 * Set the session variable with data
@@ -140,13 +202,5 @@ class Authentication
     private function setSession($sessionData)
     {
         $_SESSION['censuscms'] = $sessionData;
-    }
-
-	/**
-	 * Leaving authentication
-	 */
-    public function __destruct()
-    {
-        $this->request = null;
     }
 }
