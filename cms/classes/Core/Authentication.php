@@ -45,6 +45,11 @@ class Authentication
         $this->errors = [];
     }
 
+	/**
+	 * @param \CENSUS\Model\Request $request
+	 * @return bool
+	 * @throws \CENSUS\Core\Exception
+	 */
     public function initializeAuthentication($request)
     {
         if (!($request instanceof \CENSUS\Model\Request)) {
@@ -55,20 +60,13 @@ class Authentication
         $this->loginTime = $this->request->getArgument('timestamp');
 
         $this->validateFormRequest();
-
-        $auth = (empty($this->getErrors())) ? $this->authenticate() : [];
-
-        if (true === $this->getIsValid()) {
-            $this->setSession($auth);
-        }
+		$this->authenticate();
 
         return $this->getIsValid();
     }
 
     /**
      * Validate the form request
-     *
-     * @return bool
      */
     private function validateFormRequest()
     {
@@ -102,7 +100,9 @@ class Authentication
 
             unset($userData);
 
-            return $sessionData;
+			$this->setSessionData($sessionData);
+
+			unset($sessionData);
         } else {
             $this->addError('authenticationError', true);
         }
@@ -195,9 +195,9 @@ class Authentication
 	/**
 	 * Set the session variable with data
 	 *
-	 * @param $sessionData
+	 * @param array $sessionData
 	 */
-    private function setSession($sessionData)
+    private function setSessionData($sessionData)
     {
         $_SESSION['censuscms'] = $sessionData;
     }
