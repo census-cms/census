@@ -38,13 +38,12 @@ class Request
 	 * Request constructor
 	 *
 	 * @param \CENSUS\Core\Application $application
-	 * @param \CENSUS\Core\Configuration $configuration
 	 * @throws \CENSUS\Core\Exception
 	 */
-    public function __construct($application, $configuration)
+    public function __construct($application)
     {
     	$this->application = $application;
-        $this->configuration = $configuration;
+        $this->configuration = $this->application->getConfiguration()->getConfig();
 
         $this->initializeRequest();
         $this->initializeCommandAndAction();
