@@ -35,7 +35,7 @@ abstract class CommandController
     private $application = null;
 
     /**
-     * @var array
+     * @var \CENSUS\Core\Configuration
      */
     protected $configuration = [];
 
@@ -55,10 +55,6 @@ abstract class CommandController
         $this->request = $request;
         $this->application = $application;
 
-		$this->configuration = $this->application->getConfiguration();
-		$this->command = $this->application->getCommand();
-		$this->action = $this->application->getAction();
-
         $this->initializeAction();
     }
 
@@ -67,9 +63,9 @@ abstract class CommandController
      */
     private function initializeAction()
     {
-        if (null === $this->action) {
-            $this->setDefaultAction();
-        }
+		$this->configuration = $this->application->getConfiguration()->getConfig();
+		$this->command = $this->application->getCommand();
+		$this->action = (null !== $this->application->getAction()) ? $this->application->getAction() : $this->setDefaultAction();
 
         $this->initializeView();
         $this->callDefaultAction();
