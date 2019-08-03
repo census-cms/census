@@ -1,0 +1,40 @@
+body {
+	font-family: $font-family;
+
+	&:after {
+		@include clearfix();
+	}
+}
+
+aside,
+main {
+	@include box-sizing(border-box);
+
+	float: left;
+	height: 100%;
+}
+
+aside {
+	background: $green-lemon;
+	padding: $tpl-space-top 0 0 0;
+	width: 15%;
+}
+
+main {
+	color: $font-color;
+	padding: $tpl-space-top $tpl-space-left $tpl-space-left $tpl-space-left;
+	width: 85%;
+}
+
+.cms {
+	&__top {
+		background: $blue-flat;
+		color: $green-lemon;
+		min-height: 30px;
+		padding-left: $tpl-space-left;
+
+		a {
+			color: $white;
+		}
+	}
+}

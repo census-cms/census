@@ -1,0 +1,43 @@
+nav {
+	ul,
+	li {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	> ul {
+		> li {
+			h4 {
+				color: $white;
+				border-bottom: 1px dotted $white;
+				margin: 0;
+				text-transform: uppercase;
+
+				&:before {
+					content: '';
+					padding: 0 0 0 $tpl-space-left;
+				}
+			}
+
+			> ul {
+				margin: 0 0 $space-large 0;
+
+				> li {
+					a {
+						color: $blue-flat;
+						display: block;
+						padding: $space-small 0 $space-small $tpl-space-left;
+						text-decoration: none;
+
+						&:hover,
+						&.active {
+							background: $white;
+							color: $blue-flat;
+						}
+					}
+				}
+			}
+		}
+	}
+}

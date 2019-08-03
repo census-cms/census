@@ -1,0 +1,27 @@
+@mixin translate-x($position) {
+	-webkit-transform: translateX($position);
+	-moz-transform: translateX($position);
+	-ms-transform: translateX($position);
+	-o-transform: translateX($position);
+	transform: translateX($position);
+}
+
+@mixin translate-y($position) {
+	-webkit-transform: translateY($position);
+	-moz-transform: translateY($position);
+	-ms-transform: translateY($position);
+	-o-transform: translateY($position);
+	transform: translateY($position);
+}
+
+@mixin box-sizing($layout) {
+	-webkit-box-sizing: $layout;
+	-moz-box-sizing: $layout;
+	box-sizing: $layout;
+}
+
+@mixin clearfix() {
+	content: '';
+	clear: both;
+	display: block;
+}
