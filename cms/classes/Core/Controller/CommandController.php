@@ -63,20 +63,23 @@ abstract class CommandController
         $this->request = $request;
         $this->application = $application;
 
-        $this->initializeAction();
+        $this->initializeController();
+		$this->initializeView();
+		$this->callDefaultAction();
     }
 
     /**
      * Initialize action
      */
-    private function initializeAction()
+    private function initializeController()
     {
 		$this->configuration = $this->application->getConfiguration()->getConfig();
 		$this->command = $this->application->getCommand();
 		$this->action = (null !== $this->application->getAction()) ? $this->application->getAction() : $this->getDefaultAction();
 
-        $this->initializeView();
-        $this->callDefaultAction();
+		if (method_exists($this, 'initializeAction')) {
+			$this->initializeAction();
+		}
     }
 
     /**
