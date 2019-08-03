@@ -40,6 +40,14 @@ class View
     private $arguments = [];
 
 	/**
+	 * The layout
+	 *
+	 *
+	 * @var string
+	 */
+    private $layout = '_layout.html';
+
+	/**
 	 * Template file
 	 *
 	 * @var string
@@ -50,6 +58,11 @@ class View
 	 * @var \CENSUS\Core\View\Resources
 	 */
     private $resources = null;
+
+	/**
+	 * @var \CENSUS\Core\View\Navigation
+	 */
+    private $navigation = null;
 
     /**
      * Twig
@@ -70,7 +83,9 @@ class View
         $this->command = $command;
         $this->action = $action;
         $this->configuration = $viewConfig['template'];
-        $this->resources = new \CENSUS\Core\View\Resources($viewConfig['resources']);
+
+        $this->resources = new \CENSUS\Core\View\Resources($command, $viewConfig['resources']);
+        $this->navigation = new \CENSUS\Core\View\Navigation();
 
         $this->initializeTemplate();
 
@@ -97,19 +112,44 @@ class View
 	}
 
 	/**
-	 * Render
-	 * A wrapper for the Twig renderer
+	 * Set the layout
 	 *
 	 * @param string $layout
+	 */
+	public function setLayout($layout)
+	{
+		$this->layout = $layout;
+	}
+
+	/**
+	 * Render
+	 * A wrapper for the Twig renderer
 	 *
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
 	 */
-    public function render($layout = '_layout.html')
+    public function render()
     {
-        echo $this->twig->render($layout, ['page' => $this->getPageParts()]);
+        echo $this->twig->render($this->layout, ['page' => $this->getPageParts()]);
     }
+
+	/**
+	 * Render a partial into an existing view
+	 *
+	 * @param string $fileName
+	 * @param array $arguments
+	 *
+	 * @return string
+	 *
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
+	 */
+    private function getPartial($fileName, $arguments)
+	{
+		return $this->twig->render($fileName, $arguments);
+	}
 
 	/**
 	 * Get the HTML parts for the template
@@ -124,6 +164,7 @@ class View
 	{
 		return [
 			'resources' => $this->resources->getPageResources(),
+			'navigation' => $this->getPartial('partials/navigation.html', $this->navigation->getList()),
 			'body' => $this->twig->load($this->templateFile)->render($this->arguments)
 		];
 	}

@@ -10,6 +10,11 @@ namespace CENSUS\Core\View;
 class Resources
 {
 	/**
+	 * The requested command
+	 */
+	private $command = '';
+
+	/**
 	 * Page resources
 	 *
 	 * @var string
@@ -19,10 +24,12 @@ class Resources
 	/**
 	 * Resources constructor
 	 *
+	 * @param string $command
 	 * @param array $resources
 	 */
-	public function __construct ($resources)
+	public function __construct ($command, $resources)
 	{
+		$this->command = $command;
 		$this->resources = $resources;
 	}
 
@@ -69,7 +76,7 @@ class Resources
 	 */
 	private function getStylesheetTag($stylesheet)
 	{
-		$href = (is_array($stylesheet)) ? array_pop($stylesheet) : $stylesheet;
+		$href = (is_array($stylesheet)) ? $stylesheet[$this->command] : $stylesheet;
 		return '<link rel="stylesheet" type="text/css" href="' . $href . '">' . PHP_EOL;
 	}
 

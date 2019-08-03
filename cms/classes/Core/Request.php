@@ -95,7 +95,7 @@ class Request
 		 * by default, the dashboard is loaded if no command is set
 		 */
 		if (null == $this->command) {
-			$this->command = 'dashboard';
+			$this->command = 'backend';
 		}
 	}
 

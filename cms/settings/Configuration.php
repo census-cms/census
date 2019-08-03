@@ -20,8 +20,8 @@ return [
                 'login',
 				'logout'
             ],
-            'dashboard' => [
-                'overview'
+            'backend' => [
+                'dashboard'
             ],
             'pagetree',
             'plugin',
@@ -38,7 +38,8 @@ return [
 		],
 		'resources' => [
 			'css' => [
-				'login' => 'assets/stylesheets/login.css'
+				'authentication' => 'assets/stylesheets/login.css',
+				'backend' => 'assets/stylesheets/backend.css'
 			]
 		]
 	],
