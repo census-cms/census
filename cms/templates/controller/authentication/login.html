@@ -1,12 +1,23 @@
 <main>
 {% if valid == false and errors.timeoutError %}
-    <p>Timeout. Please <a href="/backend">reload this page</a> and login again.</p>
+    <div class="modal__error">
+        <div class="wrapper">
+        <p><strong>⚠</strong> Timeout: please <a href="/backend">reload the page</a> and login again.</p>
+        </div>
+    </div>
 {% elseif valid == false and errors.authenticationError %}
-    <p>Error, please verify your login data (you have {{ retryCount }} retries).</p>
+    <div class="modal__error">
+        <div class="wrapper">
+        <p><strong>⚠</strong> Error: please verify your login data ({{ retryCount }} retries left).</p>
+        </div>
+    </div>
 {% endif %}
-
 {% if valid == false and locked == true %}
-    <p>Please contact your administrator, too many login attempts.</p>
+    <div class="modal__error">
+        <div class="wrapper">
+        <p><strong>⚠</strong> Please contact your administrator, too many login attempts received.</p>
+        </div>
+    </div>
 {% else %}
     <div class="login__form">
         <header>
