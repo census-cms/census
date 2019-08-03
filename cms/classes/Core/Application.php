@@ -67,10 +67,6 @@ class Application
 		$this->initializeController();
 
         $this->flushOutputBuffering();
-
-        echo '<pre>';
-        var_dump($this->session);
-        echo '</pre>';
 	}
 
 	private function initializeController()

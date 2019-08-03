@@ -6,6 +6,6 @@ class DashboardController extends CommandController
 {
     protected function overviewAction()
     {
-        $this->view->render('overview.html');
+        $this->view->assign(['foo' => 'bar']);
     }
 }

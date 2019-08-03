@@ -1,24 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>census CMS Login</title>
-</head>
-<body>
+<main>
+{% if valid == false and errors.timeoutError %}
+    <p>Timeout. Please <a href="/backend">reload this page</a> and login again.</p>
+{% elseif valid == false and errors.authenticationError %}
+    <p>Error, please verify your login data (you have {{ retryCount }} retries).</p>
+{% endif %}
 
-<section>
-    <h3>census CMS Login</h3>
-
-    {% if valid == false and errors.timeoutError %}
-        <p>Timeout. Please <a href="/backend">reload this page</a> and login again.</p>
-    {% elseif valid == false and errors.authenticationError %}
-        <p>Error, please verify your login data (you have {{ retryCount }} retries).</p>
-    {% endif %}
-
-    {% if valid == false and locked == true %}
-        <p>Please contact your administrator, too many login attempts.</p>
-    {% else %}
-        <form method="post" action="">
+{% if valid == false and locked == true %}
+    <p>Please contact your administrator, too many login attempts.</p>
+{% else %}
+    <div class="login__form">
+        <header>
+            <h3>census CMS Login</h3>
+        </header>
+        <form method="post">
             <fieldset>
                 <div class="form-row">
                     <input type="text" name="user" placeholder="User" autocomplete="off" />
@@ -32,9 +26,11 @@
             </fieldset>
             <input type="hidden" name="timestamp" value="{{ timestamp }}" />
         </form>
-    {% endif %}
+    </div>
+{% endif %}
 
-</section>
-
-</body>
-</html>
+    <div class="login_meta">
+        powered by<br />
+        <img src="assets/images/census_logo.svg" alt="powered by census CMS" />
+    </div>
+</main>

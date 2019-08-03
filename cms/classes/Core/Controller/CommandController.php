@@ -1,6 +1,14 @@
 <?php
 namespace CENSUS\Core\Controller;
 
+/**
+ * Class CommandController
+ * Extended by any controller, instanciates the view
+ * The command controller switches the controller by the given
+ * command (cmd) and action (action) from the request.
+ *
+ * @package CENSUS\Core\Controller
+ */
 abstract class CommandController
 {
     /**
@@ -88,7 +96,7 @@ abstract class CommandController
      */
     private function initializeView()
     {
-        $this->view = new \CENSUS\Core\View($this->command);
+        $this->view = new \CENSUS\Core\View($this->command, $this->action, $this->configuration['view']);
     }
 
     /**

@@ -32,8 +32,7 @@ class AuthenticationController extends CommandController
 			}
         }
 
-        $this->view->render(
-            'login.html',
+        $this->view->assign(
             [
                 'timestamp' => time(),
                 'valid' => $this->authentication->getIsValid(),

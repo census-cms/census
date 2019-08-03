@@ -1,0 +1,96 @@
+/**
+This is the default login screen stylesheet
+ */
+body {
+	color: rgb(0, 80, 130);
+	font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+fieldset {
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+.login__form {
+	background: rgb(0, 80, 130);
+	left: 0;
+	position: absolute;
+	top: 50%;
+	width: 60%;
+
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+.login__form header {
+	background: rgb(223, 235, 0);
+	color: rgb(0, 80, 130);
+	padding: 0 25px 0 0;
+	text-align: right;
+}
+
+.login__form header h3 {
+	font-weight: normal;
+	margin: 0;
+	padding: 25px 0;
+}
+
+.login__form::after {
+	content: '';
+	clear: both;
+	display: block;
+}
+
+.login__form form {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	float: right;
+	margin: 25px 25px 25px 0;
+	width: 25%;
+}
+
+.form-row {
+	margin: 0 0 15px 0;
+}
+
+.form-row:last-child {
+	margin: 0;
+}
+
+input,
+button {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px 25px;
+}
+
+input {
+	width: 100%;
+}
+
+.login_meta {
+	left: 50%;
+	position: absolute;
+	bottom: 8%;
+	text-align: center;
+	width: 10%;
+
+	-webkit-transform: translateX(-50%);
+	-moz-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+	-o-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+.login_meta img {
+	height: auto;
+	width: 100%;
+}
