@@ -68,7 +68,8 @@ class Navigation
 
 		foreach ($entries as $key => $module) {
 			$moduleLinks[] = [
-				'href' => '?cmd=backend&action=module&mod=' . $key,
+				'key' => $key,
+				'href' => (isset($module['href'])) ? $module['href'] : '?cmd=backend&action=module&mod=' . $key,
 				'label' => $module['label'],
 				'category' => ucfirst($category)
 			];

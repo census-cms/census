@@ -4,14 +4,15 @@ return [
 		'page' => [
 			'label' => 'Pages'
 		],
-		'module' => [
-			'label' => 'Modules'
+		'plugin' => [
+			'label' => 'Plugins'
 		],
 		'file' => [
 			'label' => 'Files'
 		],
 		'user' => [
-			'label' => 'Users'
+			'label' => 'Users',
+			'admin' => true
 		]
 	],
 	'frontend' => [
@@ -21,7 +22,17 @@ return [
 	],
 	'system' => [
 		'config' => [
-			'label' => 'Configuration'
+			'label' => 'Configuration',
+			'admin' => true
+		]
+	],
+	'profile' => [
+		'profile' => [
+			'label' => 'Edit'
+		],
+		'logout' => [
+			'label' => 'Logout',
+			'href' => '?cmd=authentication&action=logout'
 		]
 	]
 ];

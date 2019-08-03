@@ -76,22 +76,6 @@ abstract class CommandController
 		$this->configuration = $this->application->getConfiguration()->getConfig();
 		$this->command = $this->application->getCommand();
 		$this->action = (null !== $this->application->getAction()) ? $this->application->getAction() : $this->getDefaultAction();
-
-		if (method_exists($this, 'initializeAction')) {
-			$this->initializeAction();
-		}
-    }
-
-    /**
-     * Set default action
-     *
-     * Checks if the current command has a default action while
-     * request does not provide one
-     */
-    private function getDefaultAction()
-    {
-        $actions = $this->configuration[$this->context]['controllerAction'][$this->command];
-        return (isset($actions[0])) ? $actions[0] : null;
     }
 
     /**
@@ -107,11 +91,27 @@ abstract class CommandController
      */
     private function callDefaultAction()
     {
+		if (method_exists($this, 'initializeAction')) {
+			$this->initializeAction();
+		}
+
         if (null !== $this->action) {
             $actionMethodName = $this->action . 'Action';
             $this->$actionMethodName();
         }
     }
+
+	/**
+	 * Get default action
+	 *
+	 * Checks if the current command has a default action while
+	 * request does not provide one
+	 */
+	private function getDefaultAction()
+	{
+		$actions = $this->configuration[$this->context]['controllerAction'][$this->command];
+		return (isset($actions[0])) ? $actions[0] : null;
+	}
 
 	/**
 	 * Get the application

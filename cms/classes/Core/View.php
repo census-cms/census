@@ -108,7 +108,15 @@ class View
 	 */
     public function assign($arguments)
 	{
-		$this->arguments = $arguments;
+		foreach ($arguments as $key => $argument) {
+			if (is_array($argument)) {
+				foreach ($argument as $argumentKey => $argumentSub) {
+					$this->arguments[$argumentKey] = $argumentSub;
+				}
+			} else {
+				$this->arguments[$key] = $argument;
+			}
+		}
 	}
 
 	/**
@@ -164,7 +172,10 @@ class View
 	{
 		return [
 			'resources' => $this->resources->getPageResources(),
-			'navigation' => $this->getPartial('partials/navigation.html', $this->navigation->getList()),
+			'navigation' => $this->getPartial(
+				'partials/navigation.html', array_merge($this->arguments,
+				['nav' => $this->navigation->getList()])
+			),
 			'body' => $this->twig->load($this->templateFile)->render($this->arguments)
 		];
 	}

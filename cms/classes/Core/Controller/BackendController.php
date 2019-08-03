@@ -15,6 +15,14 @@ class BackendController extends CommandController
 	protected function initializeAction()
 	{
 		$this->backend = new \CENSUS\Core\Backend($this->getApplication());
+
+		$currentModule = $this->request->hasArgument('mod') ? $this->request->getArgument('mod') : '';
+
+		$this->view->assign(
+			[
+				'currentModule' => $currentModule
+			]
+		);
 	}
 
 	protected function dashboardAction()
@@ -23,5 +31,6 @@ class BackendController extends CommandController
 
 	protected function moduleAction()
 	{
+		$this->view->assign(['foo' => 'bar']);
 	}
 }
