@@ -1,0 +1,18 @@
+<aside>
+	<nav>
+		<ul>
+			{% for category in categories %}
+			<li>
+				{{ category.label }}
+				<ul>
+				{% for mod in category.modules %}
+					{% if mod.category == category.label %}
+					<li><a href="{{ mod.href }}">{{ mod.label }}</a></li>
+					{% endif %}
+				{% endfor %}
+				</ul>
+			</li>
+			{% endfor %}
+		</ul>
+	</nav>
+</aside>

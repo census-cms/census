@@ -15,6 +15,7 @@ class AuthenticationController extends CommandController
     protected function loginAction()
     {
         $this->authentication = new \CENSUS\Core\Authentication($this->request);
+		$this->view->setLayout('_login.html');
 
         if (
             $this->request->hasArgument('auth') &&

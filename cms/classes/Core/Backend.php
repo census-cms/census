@@ -1,7 +1,16 @@
 <?php
 namespace CENSUS\Core;
 
-abstract class Backend
+/**
+ * Class Backend
+ *
+ *
+ * @package CENSUS\Core
+ */
+class Backend
 {
+	public function __construct ()
+	{
 
+	}
 }
