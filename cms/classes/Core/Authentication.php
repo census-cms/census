@@ -73,6 +73,7 @@ class Authentication
 				unset ($localUserData['ptoken']);
 
 				$this->setIsValid(true);
+				$this->clearAttempt();
 				$this->initializeSession($localUserData);
 			} else {
 				$this->authenticationAttempt();
@@ -160,6 +161,16 @@ class Authentication
 	}
 
 	/**
+	 * Clear attempt sesseion
+	 */
+	private function clearAttempt()
+	{
+		if (isset($_SESSION['attempt'])) {
+			unset($_SESSION['attempt']);
+		}
+	}
+
+	/**
 	 * Verify authentication lock
 	 */
 	public function getIsLocked()
@@ -172,6 +183,11 @@ class Authentication
 		return false;
 	}
 
+	/**
+	 * Get the available attempt count
+	 *
+	 * @return int
+	 */
 	public function getAvailableAttempts()
 	{
 		return (3 - $_SESSION['attempt']['counter']);
