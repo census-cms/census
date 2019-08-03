@@ -13,6 +13,13 @@ class View
      */
     private $command;
 
+	/**
+	 * The template path
+	 *
+	 * @var string
+	 */
+    private $templatePath = '';
+
     /**
      * Twig
      *
@@ -24,28 +31,48 @@ class View
     {
         $this->command = $command;
 
+        $this->setControllerTemplatePath();
+
         $loader = new FilesystemLoader($this->getTemplatePath());
         $this->twig = new Environment($loader);
     }
 
-    /**
-     * @param string $templateFile
-     * @param array $arguments
-	 * @return void
-     */
+	/**
+	 * @param string $templateFile
+	 * @param array $arguments
+	 *
+	 * @throws \Twig\Error\LoaderError
+	 * @throws \Twig\Error\RuntimeError
+	 * @throws \Twig\Error\SyntaxError
+	 */
     public function render($templateFile, $arguments = [])
     {
         echo $this->twig->render($templateFile, $arguments);
     }
 
-    /**
-     * Set the current template
-     */
-    private function getTemplatePath()
-    {
-        $systemTemplateDir = strtolower($this->command);
-        $templatePath = TEMPLATE_DIR . $systemTemplateDir;
+	/**
+	 * Set the default template path for controller
+	 */
+    private function setControllerTemplatePath()
+	{
+		$this->setTemplatePath('controller/' . strtolower($this->command));
+	}
 
-        return $templatePath;
+	/**
+	 * Set the current template path
+	 *
+	 * @param string $path
+	 */
+    public function setTemplatePath($path)
+	{
+		$this->templatePath = TEMPLATE_DIR. $path;
+	}
+
+    /**
+     * Get the current template path
+     */
+    public function getTemplatePath()
+    {
+    	return $this->templatePath;
     }
 }
