@@ -75,7 +75,9 @@ class Application
 
 	private function initializeController()
 	{
-		$requestedCommandControllerName = ucfirst($this->request->getCommand()) . 'Controller';
+		$command = (false === $this->getIsAuthenticated()) ? 'Authentication' : ucfirst($this->request->getCommand());
+
+		$requestedCommandControllerName = $command . 'Controller';
 		$requestedCommandControllerClass = '\\CENSUS\\Core\\Controller\\' . $requestedCommandControllerName;
 
 		if (class_exists($requestedCommandControllerClass)) {
