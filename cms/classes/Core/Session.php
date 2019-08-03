@@ -61,6 +61,8 @@ class Session
 
             return true;
         }
+
+        return false;
     }
 
     /**

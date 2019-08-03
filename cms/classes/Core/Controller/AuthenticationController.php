@@ -14,7 +14,7 @@ class AuthenticationController extends CommandController
 	 */
     protected function loginAction()
     {
-        $this->authentication = new \CENSUS\Core\Authentication();
+        $this->authentication = new \CENSUS\Core\Authentication($this->request);
 
         if (
             $this->request->hasArgument('auth') &&
@@ -25,9 +25,11 @@ class AuthenticationController extends CommandController
                 !empty($this->request->getArgument('password'))
             )
         ) {
-            if (true === $this->authentication->authenticationRequest($this->request)) {
-                $this->redirect('/backend/');
-            }
+			$this->authentication->authenticate();
+
+			if (true === $this->authentication->getIsValid()) {
+				$this->redirect('/backend/');
+			}
         }
 
         $this->view->render(
@@ -35,7 +37,9 @@ class AuthenticationController extends CommandController
             [
                 'timestamp' => time(),
                 'valid' => $this->authentication->getIsValid(),
-                'errors' => $this->authentication->getErrors()
+                'errors' => $this->authentication->getErrors(),
+				'locked' => $this->authentication->getIsLocked(),
+				'retryCount' => $this->authentication->getAvailableAttempts()
             ]
         );
     }

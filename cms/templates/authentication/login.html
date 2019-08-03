@@ -2,34 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>census CMS Login</title>
 </head>
 <body>
 
 <section>
     <h3>census CMS Login</h3>
-    <h4>Test</h4>
 
     {% if valid == false and errors.timeoutError %}
-    <p>Timeout. Please <a href="/backend">reload this page</a> and login again.</p>
+        <p>Timeout. Please <a href="/backend">reload this page</a> and login again.</p>
     {% elseif valid == false and errors.authenticationError %}
-    <p>Error, please verify your login data (you have {{ retryCount }} retries).</p>
+        <p>Error, please verify your login data (you have {{ retryCount }} retries).</p>
     {% endif %}
 
-    <form method="post" action="">
-        <fieldset>
-            <div class="form-row">
-                <input type="text" name="user" placeholder="User" />
-            </div>
-            <div class="form-row">
-                <input type="password" name="password" placeholder="Pass" />
-            </div>
-            <div class="form-row">
-                <button type="submit" name="auth">Login</button>
-            </div>
-        </fieldset>
-        <input type="hidden" name="timestamp" value="{{ timestamp }}" />
-    </form>
+    {% if valid == false and locked == true %}
+        <p>Please contact your administrator, too many login attempts.</p>
+    {% else %}
+        <form method="post" action="">
+            <fieldset>
+                <div class="form-row">
+                    <input type="text" name="user" placeholder="User" autocomplete="off" />
+                </div>
+                <div class="form-row">
+                    <input type="password" name="password" placeholder="Pass" />
+                </div>
+                <div class="form-row">
+                    <button type="submit" name="auth">Login</button>
+                </div>
+            </fieldset>
+            <input type="hidden" name="timestamp" value="{{ timestamp }}" />
+        </form>
+    {% endif %}
+
 </section>
 
 </body>

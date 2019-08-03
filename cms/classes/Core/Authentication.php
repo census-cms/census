@@ -9,7 +9,7 @@ namespace CENSUS\Core;
  */
 class Authentication
 {
-    private $userDir = BASE_DIR . '/storage/userdata/user/';
+    private $userDir = BASE_DIR . 'storage/userdata/user/';
 
     /**
      * @var \CENSUS\Model\Request
@@ -30,6 +30,13 @@ class Authentication
      */
     private $isValid = false;
 
+	/**
+	 * Authentication is locked
+	 *
+	 * @var bool
+	 */
+    private $isLocked = false;
+
     /**
      * Error
      *
@@ -39,67 +46,84 @@ class Authentication
 
 	/**
 	 * Authentication constructor
-	 */
-    public function __construct()
-    {
-        $this->errors = [];
-    }
-
-	/**
+	 *
 	 * @param \CENSUS\Model\Request $request
-	 * @return bool
 	 * @throws \CENSUS\Core\Exception
 	 */
-    public function authenticationRequest($request)
+    public function __construct($request)
     {
-        if (!($request instanceof \CENSUS\Model\Request)) {
-            throw new \CENSUS\Core\Exception('Validation error, invalid Request', \CENSUS\Core\Exception::ERR_INVALID);
-        }
+		if (!($request instanceof \CENSUS\Model\Request)) {
+			throw new \CENSUS\Core\Exception('Validation error, invalid Request', \CENSUS\Core\Exception::ERR_INVALID);
+		}
 
-        $this->request = $request;
-        $this->loginTime = $this->request->getArgument('timestamp');
-
-        $this->validateFormRequest();
-		$this->authenticate();
-
-        return $this->getIsValid();
-    }
-
-    /**
-     * Validate the form request
-     */
-    private function validateFormRequest()
-    {
-        if ($this->loginTime < (time() - (600))) {
-            $this->errors['timeoutError'] = true;
-        }
+        $this->errors = [];
+		$this->request = $request;
+		$this->loginTime = $this->request->getArgument('timestamp');
     }
 
     /**
      * Authenticate by requested user and password
-     *
-     * @return array|bool
      */
-    private function authenticate()
+    public function authenticate()
     {
-        $localUserData = $this->getUserData();
+		if (true === $this->validateFormRequest()) {
+			$localUserData = $this->getUserData();
 
-        if (
-			$localUserData['name'] == $this->request->getArgument('user') &&
-            true === $this->verifyPassword($this->request->getArgument('password'))
-        ) {
-        	unset ($localUserData['ptoken']);
+			if (false !== $localUserData && $localUserData['name'] == $this->request->getArgument('user') && true === $this->verifyPassword($this->request->getArgument('password'))) {
+				unset ($localUserData['ptoken']);
 
-            $this->setIsValid(true);
-			$this->setSessionData($localUserData);
-        } else {
-            $this->addError('authenticationError', true);
-        }
+				$this->setIsValid(true);
+				$this->initializeSession($localUserData);
+			} else {
+				$this->authenticationAttempt();
+				$this->addError('authenticationError', true);
+			}
 
-		unset ($localUserData);
-
-        return false;
+			unset ($localUserData);
+		}
     }
+
+	/**
+	 * Validate the form request
+	 *
+	 * @return bool
+	 */
+	private function validateFormRequest()
+	{
+		if (true === $this->getIsLocked()) {
+			$this->addError('authenticationError', true);
+			$this->setIsValid(false);
+
+			return false;
+		}
+
+		if ($this->loginTime < (time() - (600))) {
+			$this->addError('timeoutError', true);
+			$this->setIsValid(false);
+
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get the user data
+	 *
+	 * @return bool|array
+	 */
+	private function getUserData()
+	{
+		$userName = $this->request->getArgument('user');
+		$userDataFile = $this->userDir . $this->getHash($userName) . '.php';
+
+		if (!file_exists($userDataFile)) {
+			$this->addError('authenticationError', true);
+			return false;
+		}
+
+		return require_once $userDataFile;
+	}
 
 	/**
 	 * Verify the password
@@ -117,31 +141,40 @@ class Authentication
 	}
 
 	/**
-	 * Get the user data
-	 *
-	 * @return bool|array
+	 * Log attempts with current time and lock authentication after too many failures
 	 */
-    private function getUserData()
+	private function authenticationAttempt()
 	{
-		$userName = $this->request->getArgument('user');
-		$userDataFile = $this->userDir . $this->getHash($userName) . '.php';
-
-		if (!file_exists($userDataFile)) {
-			return false;
+		if (isset($_SESSION['attempt'])) {
+			$_SESSION['attempt']['counter']++;
+		} else {
+			$_SESSION['attempt'] = [
+				'counter' => 1,
+				'time' => time()
+			];
 		}
 
-		return require_once $userDataFile;
+		if (isset($_SESSION['attempt']) && $_SESSION['attempt']['time'] < (time() - 600)) {
+			unset($_SESSION['attempt']);
+		}
 	}
 
 	/**
-	 * Get a hash
-	 *
-     * @param string $string
-	 * @return string
+	 * Verify authentication lock
 	 */
-	private function getHash($string)
+	public function getIsLocked()
 	{
-		return hash('sha256', $string);
+		if ($_SESSION['attempt']['counter'] >= 3) {
+			$this->setIsValid(false);
+			return true;
+		}
+
+		return false;
+	}
+
+	public function getAvailableAttempts()
+	{
+		return (3 - $_SESSION['attempt']['counter']);
 	}
 
     /**
@@ -184,11 +217,22 @@ class Authentication
     }
 
 	/**
-	 * Set the session variable with data
+	 * Get a hash
+	 *
+	 * @param string $string
+	 * @return string
+	 */
+	private function getHash($string)
+	{
+		return hash('sha256', $string);
+	}
+
+	/**
+	 * Initialize the session with data
 	 *
 	 * @param array $userData
 	 */
-    private function setSessionData($userData)
+    private function initializeSession($userData)
     {
         $_SESSION['censuscms'] = [
 			'name' => $userData['name'],
