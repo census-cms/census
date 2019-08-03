@@ -65,7 +65,7 @@ abstract class CommandController
     {
 		$this->configuration = $this->application->getConfiguration()->getConfig();
 		$this->command = $this->application->getCommand();
-		$this->action = (null !== $this->application->getAction()) ? $this->application->getAction() : $this->setDefaultAction();
+		$this->action = (null !== $this->application->getAction()) ? $this->application->getAction() : $this->getDefaultAction();
 
         $this->initializeView();
         $this->callDefaultAction();
@@ -77,10 +77,10 @@ abstract class CommandController
      * Checks if the current command has a default action while
      * request does not provide one
      */
-    private function setDefaultAction()
+    private function getDefaultAction()
     {
         $actions = $this->configuration[$this->context]['controllerAction'][$this->command];
-        $this->action = (isset($actions[0])) ? $actions[0] : null;
+        return (isset($actions[0])) ? $actions[0] : null;
     }
 
     /**
