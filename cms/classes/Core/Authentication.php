@@ -134,10 +134,9 @@ class Authentication
 	 */
     private function verifyPassword($password)
 	{
-		// must be copied also into the user create
+		// @todo must be copied also into the user create
 		$hash = password_hash($this->request->getArgument('password'), PASSWORD_ARGON2I, ['memory_cost' => 2048, 'time_cost' => 4, 'threads' => 3]);
 
-		// this is the password verify
 		return password_verify($password, $hash);
 	}
 
@@ -147,6 +146,14 @@ class Authentication
 	private function authenticationAttempt()
 	{
 		if (isset($_SESSION['attempt'])) {
+			if ($_SESSION['attempt']['counter'] >= 5) {
+				$_SESSION['attempt']['from'] = $_SERVER['HTTP_HOST'];
+				header('HTTP/1.1 503 Service Temporarily Unavailable');
+
+				// @todo log. notify admin (too)?
+				exit;
+			}
+
 			$_SESSION['attempt']['counter']++;
 		} else {
 			$_SESSION['attempt'] = [
