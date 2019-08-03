@@ -1,18 +1,18 @@
-<aside>
-	<nav>
-		<ul>
-			{% for category in categories %}
-			<li>
-				{{ category.label }}
-				<ul>
-				{% for mod in category.modules %}
-					{% if mod.category == category.label %}
-					<li><a href="{{ mod.href }}">{{ mod.label }}</a></li>
-					{% endif %}
-				{% endfor %}
-				</ul>
-			</li>
+<nav>
+	<ul>
+		{% for category in nav.categories %}
+		<li>
+			<h4>{{ category.label }}</h4>
+			<ul>
+			{% for mod in category.modules %}
+				{% if mod.category == category.label %}
+				<li>
+					<a href="{{ mod.href }}"{% if currentModule and currentModule == mod.key %} class="active"{% endif %}>{{ mod.label }}</a>
+				</li>
+				{% endif %}
 			{% endfor %}
-		</ul>
-	</nav>
-</aside>
+			</ul>
+		</li>
+		{% endfor %}
+	</ul>
+</nav>

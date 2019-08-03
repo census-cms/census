@@ -7,10 +7,14 @@
 	{{ page.resources | raw }}
 </head>
 <body>
-<div class="cms__top">
-
-</div>
-{{ page.navigation | raw }}
-{{ page.body | raw }}
+	<div class="cms__top">
+		<small><a href="/backend/">Dashboard</a> | census 0.0.1-dev</small>
+	</div>
+	<aside>
+	{{ page.navigation | raw }}
+	</aside>
+	<main>
+	{{ page.body | raw }}
+	</main>
 </body>
 </html>
