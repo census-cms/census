@@ -24,6 +24,10 @@ return [
 		'config' => [
 			'label' => 'Configuration',
 			'admin' => true
+		],
+		'language' => [
+			'label' => 'Languages',
+			'admin' => true
 		]
 	],
 	'profile' => [
