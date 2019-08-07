@@ -4,31 +4,31 @@ namespace CENSUS\Core;
 class Application
 {
 	/**
+	 * @var \CENSUS\Core\Session
+	 */
+	private $session = null;
+
+	/**
 	 * Configuration
 	 *
 	 * @var \CENSUS\Core\Configuration
 	 */
 	private $configuration = null;
 
-	/**
-	 * @var \Composer\Autoload\ClassLoader
-	 */
-	private $classLoader = null;
-
-	/**
-	 * @var \CENSUS\Core\FileBase
-	 */
-	private $fileBase = null;
-
     /**
      * @var \CENSUS\Model\Request
      */
 	private $request = null;
 
-    /**
-     * @var \CENSUS\Core\Session
-     */
-    private $session = null;
+	/**
+	 * @var \CENSUS\Core\View
+	 */
+    protected $view = null;
+
+	/**
+	 * @var \Composer\Autoload\ClassLoader
+	 */
+	private $classLoader = null;
 
     /**
      * Application constructor
@@ -55,10 +55,19 @@ class Application
 		//$this->fileBase = new \CENSUS\Core\FileBase($this->configuration->getConfigByKey('pagetreeRoot'));
 		$this->request = (new \CENSUS\Core\Request($this->configuration->getConfig(), $this->session->isAuthenticated()))->getRequest();
 
+		$this->initializeView();
 		$this->initializeController();
 		$this->initializeModule();
 
         $this->flushOutputBuffering();
+	}
+
+	/**
+	 * Initialize the view
+	 */
+	private function initializeView()
+	{
+		$this->view = new \CENSUS\Core\View($this->request, $this->configuration->getConfigByKey('view'));
 	}
 
 	/**
@@ -68,14 +77,17 @@ class Application
 	{
 		$command = (false === $this->session->isAuthenticated()) ? 'Authentication' : ucfirst($this->request->getArgument('cmd'));
 
-		\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Controller\\' . $command . 'Controller', [$this->request, $this]);
+		\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Controller\\' . $command . 'Controller', [$this->request, $this->view, $this]);
 	}
 
+	/**
+	 * Initialize module
+	 */
 	private function initializeModule()
 	{
 		$command = (false === $this->session->isAuthenticated()) ? 'Authentication' : ucfirst($this->request->getArgument('mod'));
 
-		\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Module\\' . $command . 'Module', [$this->configuration->getConfig()]);
+		\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Module\\' . $command, [$this->request, $this->view, $this->configuration->getConfig()]);
 	}
 
 	/**

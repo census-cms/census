@@ -3,19 +3,7 @@
 {% block pagetitle %}Module::page{% endblock%}
 
 {% block main %}
-<div class="cms__columns">
-	<nav class="cms__sidebar pagetree">
-		<h3>Page tree</h3>
-
-		<ul>
-			<li>Home</li>
-			<li>Über uns
-				<ul>
-					<li>Anfahrt</li>
-				</ul>
-			</li>
-		</ul>
-	</nav>
+	{% include 'partials/pagetree.html' %}
 
 	<div class="cms__body">
 		<h3>Module::page</h3>
@@ -23,5 +11,4 @@
 			Edit and add pages, change settings or content.
 		</p>
 	</div>
-</div>
 {% endblock %}

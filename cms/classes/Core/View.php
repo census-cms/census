@@ -58,7 +58,9 @@ class View
     private function initializeView()
 	{
 		$loader = new \Twig\Loader\FilesystemLoader($this->configuration['templatePaths']);
-		$this->twig = new \Twig\Environment($loader);
+		$this->twig = new \Twig\Environment($loader, ['debug' => true]);
+
+		$this->twig->addExtension(new \Twig\Extension\DebugExtension());
 	}
 
 	/**
@@ -66,7 +68,7 @@ class View
 	 */
 	private function registerGlobals()
 	{
-		$this->twig->addGlobal('CMS__navigation', (new \CENSUS\Core\View\Globals\Navigation())->getArguments());
+		$this->twig->addGlobal('GLOBAL__navigation', (new \CENSUS\Core\View\Globals\Navigation())->getArguments());
 	}
 
 	/**
@@ -77,21 +79,18 @@ class View
 	public function getLayoutByRequest()
 	{
 		$module = $this->request->getArgument('mod');
+		$context = $this->request->getArgument('context');
 		$template = 'controller/' . $this->request->getArgument('cmd') . DIRECTORY_SEPARATOR . $this->request->getArgument('action');
 
 		if (null !== $module && file_exists(TEMPLATE_DIR . 'module/' . $module . '/index.html')) {
 			$template = 'module/' . $module . '/index';
 		}
 
-		return $template . '.html';
-	}
+		if (null !== $context && file_exists(TEMPLATE_DIR . 'module/' . $module . '/' . $context .  '.html')) {
+			$template = 'module/' . $module . '/' . $context;
+		}
 
-	/**
-	 * @return \Twig\Environment
-	 */
-	public function getTwig()
-	{
-		return $this->twig;
+		return $template . '.html';
 	}
 
 	/**

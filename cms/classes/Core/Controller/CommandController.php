@@ -56,27 +56,20 @@ abstract class CommandController
      * CommandController constructor
      *
      * @param array $request
+	 * @param \CENSUS\Core\View $view
 	 * @param \CENSUS\Core\Application
      */
-    public function __construct($request, $application)
+    public function __construct($request, $view, $application)
     {
         $this->request = $request;
+        $this->view = $view;
         $this->application = $application;
 		$this->configuration = $this->application->getConfiguration()->getConfig();
 
 		$this->command = $this->request->getArgument('cmd');
 		$this->action = $this->request->getArgument('action');
 
-		$this->initializeView();
 		$this->callDefaultAction();
-    }
-
-    /**
-     * Initialize the view
-     */
-    private function initializeView()
-    {
-        $this->view = new \CENSUS\Core\View($this->request, $this->configuration['view']);
     }
 
     /**

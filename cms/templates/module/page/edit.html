@@ -1,0 +1,19 @@
+{% extends 'layouts/backend.html' %}
+
+{% block pagetitle %}Module::page:edit{% endblock%}
+
+{% block main %}
+	{% include 'partials/pagetree.html' %}
+
+	<div class="cms__body">
+		<h3>Module::page:edit <em></em></h3>
+		<form method="post">
+			<fieldset>
+				<div class="form-row">
+					<label for="pageTitle">Title</label>
+					<input type="text" name="page[title]" id="pageTitle" />
+				</div>
+			</fieldset>
+		</form>
+	</div>
+{% endblock %}

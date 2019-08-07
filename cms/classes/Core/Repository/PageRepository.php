@@ -6,22 +6,12 @@ class PageRepository extends AbstractRepository
 {
 	private $pagetree = [];
 
-	public function getPagetree()
-	{
-
-	}
-
 	public function initializeRepository()
-	{
-		$this->initializePagetree();
-	}
-
-	private function initializePagetree()
 	{
 		$this->pagetree = $this->getTree();
 	}
 
-	private function getTree()
+	public function getTree()
 	{
 		$tree = include BASE_DIR . $this->getStorage() . '/tree.php';
 		return $tree;

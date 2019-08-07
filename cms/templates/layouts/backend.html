@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>census CMS - {% block pagetitle %}{% endblock %}</title>
 	<link rel="stylesheet" type="text/css" href="assets/stylesheets/backend.css" />
+	<script src="assets/javascript/jquery-3.4.1.min.js"></script>
 </head>
 <body>
 	<div class="cms__top">
@@ -13,7 +14,11 @@
 		{% include 'partials/navigation.html' %}
 	</aside>
 	<main>
-		{% block main %}{% endblock %}
+		<div class="cms__columns">
+			{% block main %}{% endblock %}
+		</div>
 	</main>
+
+<script src="assets/javascript/lib/census.js"></script>
 </body>
 </html>
