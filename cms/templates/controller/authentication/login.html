@@ -1,3 +1,8 @@
+{% extends 'layouts/authentication.html' %}
+
+{% block pagetitle %}Login{% endblock%}
+
+{% block main %}
 <main>
 {% if valid == false and errors.timeoutError %}
     <div class="modal__error">
@@ -45,3 +50,4 @@
         <img src="assets/images/census_logo.svg" alt="powered by census CMS" />
     </div>
 </main>
+{% endblock %}

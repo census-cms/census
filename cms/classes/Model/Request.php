@@ -79,4 +79,14 @@ class Request
     {
         return ($this->hasArgument($argument)) ? $this->arguments[$argument] : null;
     }
+
+	/**
+	 * @param array $arguments
+	 */
+    public function set($arguments)
+	{
+		foreach ($arguments as $argument => $value) {
+			$this->arguments[$argument] = $value;
+		}
+	}
 }

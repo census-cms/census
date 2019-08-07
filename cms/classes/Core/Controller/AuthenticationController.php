@@ -15,16 +15,13 @@ class AuthenticationController extends CommandController
     protected function loginAction()
     {
         $this->authentication = new \CENSUS\Core\Authentication($this->request);
-		$this->view->setLayout('_login.html');
 
         if (
             $this->request->hasArgument('auth') &&
             $this->request->hasArgument('user') &&
             $this->request->hasArgument('password') &&
-            (
-                !empty($this->request->getArgument('user')) &&
-                !empty($this->request->getArgument('password'))
-            )
+			!empty($this->request->getArgument('user')) &&
+			!empty($this->request->getArgument('password'))
         ) {
 			$this->authentication->authenticate();
 

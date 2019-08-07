@@ -35,7 +35,7 @@ abstract class CommandController
     /**
      * @var \CENSUS\Model\Request
      */
-    protected $request = [];
+    protected $request = null;
 
 	/**
 	 * @var \CENSUS\Core\Application
@@ -62,20 +62,13 @@ abstract class CommandController
     {
         $this->request = $request;
         $this->application = $application;
+		$this->configuration = $this->application->getConfiguration()->getConfig();
 
-        $this->initializeController();
+		$this->command = $this->request->getArgument('cmd');
+		$this->action = $this->request->getArgument('action');
+
 		$this->initializeView();
 		$this->callDefaultAction();
-    }
-
-    /**
-     * Initialize action
-     */
-    private function initializeController()
-    {
-		$this->configuration = $this->application->getConfiguration()->getConfig();
-		$this->command = $this->application->getCommand();
-		$this->action = (null !== $this->application->getAction()) ? $this->application->getAction() : $this->getDefaultAction();
     }
 
     /**
@@ -83,7 +76,7 @@ abstract class CommandController
      */
     private function initializeView()
     {
-        $this->view = new \CENSUS\Core\View($this->command, $this->action, $this->configuration['view']);
+        $this->view = new \CENSUS\Core\View($this->request, $this->configuration['view']);
     }
 
     /**
@@ -95,10 +88,17 @@ abstract class CommandController
 			$this->initializeAction();
 		}
 
-        if (null !== $this->action) {
-            $actionMethodName = $this->action . 'Action';
-            $this->$actionMethodName();
+		$actionMethodName = 'loginAction';
+
+        if (true === $this->request->getArgument('isAuthenticated')) {
+			if (null === $this->request->getArgument('action')) {
+				$actionMethodName = $this->getDefaultAction() . 'Action';
+			} else {
+				$actionMethodName = $this->request->getArgument('action') . 'Action';
+			}
         }
+
+		$this->$actionMethodName();
     }
 
 	/**

@@ -72,7 +72,7 @@ abstract class AbstractModel
 	 *
 	 * @param string $file
 	 */
-	protected function __construct($file = '')
+	public function __construct($file = '')
 	{
 		if (!empty($file)) {
 			preg_match_all('/\[.*\]/', basename($file), $fileBaseInfo);

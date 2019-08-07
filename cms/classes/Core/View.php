@@ -11,19 +11,10 @@ namespace CENSUS\Core;
  */
 class View
 {
-    /**
-     * The requested command
-     *
-     * @var string
-     */
-    private $command;
-
 	/**
-	 * The requested action
-	 *
-	 * @var string
+	 * @var \CENSUS\Model\Request
 	 */
-    private $action = '';
+	private $request = null;
 
 	/**
 	 * View configuration
@@ -33,7 +24,7 @@ class View
     private $configuration = [];
 
 	/**
-	 * Arguments to include
+	 * Arguments to feed
 	 *
 	 * @var array
 	 */
@@ -45,24 +36,7 @@ class View
 	 *
 	 * @var string
 	 */
-    private $layout = '_layout.html';
-
-	/**
-	 * Template file
-	 *
-	 * @var string
-	 */
-    private $templateFile = '';
-
-	/**
-	 * @var \CENSUS\Core\View\Resources
-	 */
-    private $resources = null;
-
-	/**
-	 * @var \CENSUS\Core\View\Navigation
-	 */
-    private $navigation = null;
+    private $layout = 'backend.html';
 
     /**
      * Twig
@@ -74,136 +48,51 @@ class View
 	/**
 	 * View constructor
 	 *
-	 * @param string $command
-	 * @param string $action
-	 * @param array $viewConfig
+	 * @param \CENSUS\Model\Request $request
+	 * @param array $configuration
 	 */
-    public function __construct($command, $action, $viewConfig)
+    public function __construct($request, $configuration)
     {
-        $this->command = $command;
-        $this->action = $action;
-        $this->configuration = $viewConfig['template'];
+        $this->configuration = $configuration;
+        $this->request = $request;
 
-        $this->resources = new \CENSUS\Core\View\Resources($command, $viewConfig['resources']);
-        $this->navigation = new \CENSUS\Core\View\Navigation();
-
-        $this->initializeTemplate();
-
-        $loader = new \Twig\Loader\FilesystemLoader($this->getTemplatePaths());
-        $this->twig = new \Twig\Environment($loader);
+        $this->initializeView();
     }
 
 	/**
 	 * Initialize template
 	 */
-    private function initializeTemplate()
+    private function initializeView()
 	{
-		$this->templateFile = $this->action . '.html';
+		$loader = new \Twig\Loader\FilesystemLoader($this->configuration['templatePaths']);
+		$this->twig = new \Twig\Environment($loader);
 	}
 
 	/**
-	 * Assign arguments to the view
-	 *
-	 * @param array $arguments
-	 */
-    public function assign($arguments)
-	{
-		foreach ($arguments as $key => $argument) {
-			if (is_array($argument)) {
-				foreach ($argument as $argumentKey => $argumentSub) {
-					$this->arguments[$argumentKey] = $argumentSub;
-				}
-			} else {
-				$this->arguments[$key] = $argument;
-			}
-		}
-	}
-
-	/**
-	 * Set the layout
-	 *
-	 * @param string $layout
-	 */
-	public function setLayout($layout)
-	{
-		$this->layout = $layout;
-	}
-
-	/**
-	 * Render
-	 * A wrapper for the Twig renderer
-	 *
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
-	 */
-    public function render()
-    {
-        echo $this->twig->render($this->layout, ['page' => $this->getPageParts()]);
-    }
-
-	/**
-	 * Render a partial into an existing view
-	 *
-	 * @param string $fileName
-	 * @param array $arguments
+	 * Get the requested template by action or module
 	 *
 	 * @return string
-	 *
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
 	 */
-    private function getPartial($fileName, $arguments)
+	private function getLayoutByRequest()
 	{
-		return $this->twig->render($fileName, $arguments);
-	}
+		$module = $this->request->getArgument('mod');
+		$template = 'controller/' . $this->request->getArgument('cmd') . DIRECTORY_SEPARATOR . $this->request->getArgument('action');
 
-	/**
-	 * Get the HTML parts for the template
-	 *
-	 * @return array
-	 *
-	 * @throws \Twig\Error\LoaderError
-	 * @throws \Twig\Error\RuntimeError
-	 * @throws \Twig\Error\SyntaxError
-	 */
-    private function getPageParts()
-	{
-		return [
-			'resources' => $this->resources->getPageResources(),
-			'navigation' => $this->getPartial(
-				'partials/navigation.html', array_merge($this->arguments,
-				['nav' => $this->navigation->getList()])
-			),
-			'body' => $this->twig->load($this->templateFile)->render($this->arguments)
-		];
-	}
-
-	/**
-	 * Get the template paths
-	 *
-	 * @return array
-	 */
-    private function getTemplatePaths()
-	{
-		$paths = [
-			$this->getControllerTemplatePath()
-		];
-
-		if (!empty($this->configuration['paths'])) {
-			$paths = array_merge($paths, $this->configuration['paths']);
+		if (null !== $module) {
+			$template = 'module/' . $module;
 		}
 
-		return $paths;
+		return $template . '.html';
 	}
 
 	/**
-	 * Get the default template path for controller
+	 * Assign arguments
+	 *
+	 * @param array $arguments
 	 */
-    private function getControllerTemplatePath()
+	public function assign($arguments)
 	{
-		return TEMPLATE_DIR . 'controller/' . strtolower($this->command);
+		$this->arguments = array_merge($this->arguments, $arguments);
 	}
 
 	/**
@@ -215,6 +104,6 @@ class View
 	 */
 	public function __destruct()
 	{
-		$this->render();
+		echo $this->twig->render($this->getLayoutByRequest(), $this->arguments);
 	}
 }

@@ -27,13 +27,19 @@ nav {
 					a {
 						color: $blue-flat;
 						display: block;
+						font-size: 14px;
 						padding: $space-small 0 $space-small $tpl-space-left;
 						text-decoration: none;
+						text-transform: uppercase;
 
 						&:hover,
 						&.active {
 							background: $white;
 							color: $blue-flat;
+						}
+
+						&:before {
+							display: inline-block;
 						}
 					}
 				}

@@ -8,9 +8,10 @@
 
 define('BASE_DIR', $baseDir . DIRECTORY_SEPARATOR);
 define('CONFIG_DIR', __DIR__ . DIRECTORY_SEPARATOR);
-define('STORAGE_DIR', $baseDir . 'storage/');
-define('PLUGIN_DIR', STORAGE_DIR . 'plugins/');
-define('TEMPLATE_DIR', CONFIG_DIR . '../templates/');
+define('STORAGE_DIR', realpath($baseDir . 'storage/'));
+define('PLUGIN_DIR', realpath(STORAGE_DIR . 'plugins/'));
+define('TEMPLATE_DIR', realpath(CONFIG_DIR . '../templates/'));
+define('ASSETS_DIR', realpath(CONFIG_DIR . '../assets/'));
 
 return [
     'pagetreeRoot' => 'page',
@@ -31,29 +32,11 @@ return [
         ]
     ],
 	'view' => [
-		'template' => [
-			'paths' => [
-				TEMPLATE_DIR . 'backend/'
-			]
-		],
-		'resources' => [
-			'css' => [
-				'authentication' => 'assets/stylesheets/login.css',
-				'backend' => 'assets/stylesheets/backend.css'
-			]
-		]
-	],
-	'page' => [
-		'charset' => 'UTF-8',
-		'title' => [
-			'prefix' => 'census CMS',
-			'suffix' => ''
+		'templatePaths' => [
+			TEMPLATE_DIR
 		]
 	],
     'session' => [
         'expires' => '3600*2'
-    ],
-	'security' => [
-		'salt' => ''
-	]
+    ]
 ];

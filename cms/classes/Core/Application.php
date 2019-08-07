@@ -21,7 +21,7 @@ class Application
 	private $fileBase = null;
 
     /**
-     * @var \CENSUS\Core\Request
+     * @var \CENSUS\Model\Request
      */
 	private $request = null;
 
@@ -29,13 +29,6 @@ class Application
      * @var \CENSUS\Core\Session
      */
     private $session = null;
-
-	/**
-	 * User is authenticated
-	 *
-	 * @var bool
-	 */
-	private $isAuthenticated = false;
 
     /**
      * Application constructor
@@ -56,29 +49,29 @@ class Application
 
 		$this->startOutputBuffering();
 
-		$this->isAuthenticated = $this->session->isAuthenticated();
-
 		$this->configuration = new \CENSUS\Core\Configuration($this);
 		$this->configuration->initializeConfiguration($baseDir);
 
-		$this->fileBase = new \CENSUS\Core\FileBase($this->configuration->getConfigByKey('pagetreeRoot'));
-		$this->request = new \CENSUS\Core\Request($this, $this->configuration->getConfig());
+		//$this->fileBase = new \CENSUS\Core\FileBase($this->configuration->getConfigByKey('pagetreeRoot'));
+		$this->request = (new \CENSUS\Core\Request($this->configuration->getConfig(), $this->session->isAuthenticated()))->getRequest();
 
 		$this->initializeController();
 
         $this->flushOutputBuffering();
 	}
 
+	/**
+	 * Initialize the controller by command
+	 */
 	private function initializeController()
 	{
-		$command = (false === $this->getIsAuthenticated()) ? 'Authentication' : ucfirst($this->request->getCommand());
+		$command = (false === $this->session->isAuthenticated()) ? 'Authentication' : ucfirst($this->request->getArgument('cmd'));
 
-		$requestedCommandControllerName = $command . 'Controller';
-		$requestedCommandControllerClass = '\\CENSUS\\Core\\Controller\\' . $requestedCommandControllerName;
+		$requestedCommandControllerClass = '\\CENSUS\\Core\\Controller\\' . $command . 'Controller';
 
 		if (class_exists($requestedCommandControllerClass)) {
 			new $requestedCommandControllerClass(
-				$this->request->getRequest(),
+				$this->request,
 				$this
 			);
 		}
@@ -127,36 +120,6 @@ class Application
 	public function getFileBase()
 	{
 		return $this->fileBase;
-	}
-
-	/**
-	 * Check authentication status
-	 *
-	 * @return bool
-	 */
-	public function getIsAuthenticated()
-	{
-		return $this->isAuthenticated;
-	}
-
-	/**
-	 * Get the current command
-	 *
-	 * @return string|null
-	 */
-	public function getCommand()
-	{
-		return $this->request->getCommand();
-	}
-
-	/**
-	 * Get the current action
-	 *
-	 * @return null
-	 */
-	public function getAction()
-	{
-		return $this->request->getAction();
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <?php
-namespace CENSUS\Core\View;
+namespace CENSUS\Core\View\Block;
 
 /**
  * Class Resources
@@ -29,9 +29,7 @@ class Navigation
 	 */
 	private function initializeNavigation()
 	{
-		$configFile = __DIR__ . '/../../../settings/Modules.php';
-
-		$this->moduleConfig = include $configFile;
+		$this->moduleConfig = include CONFIG_DIR . 'Modules.php';
 	}
 
 	/**

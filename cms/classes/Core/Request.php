@@ -8,20 +8,6 @@ class Request
      */
     private $request = null;
 
-    /**
-     * Requested command
-     *
-     * @var string|null
-     */
-    private $command = null;
-
-    /**
-     * Requested action
-     *
-     * @var null
-     */
-    private $action = null;
-
 	/**
 	 * @var \CENSUS\Core\Application
 	 */
@@ -37,67 +23,33 @@ class Request
 	/**
 	 * Request constructor
 	 *
-	 * @param \CENSUS\Core\Application $application
+	 * @param \CENSUS\Core\Configuration $configuration
+	 * @param bool $isAuthenticated
 	 * @throws \CENSUS\Core\Exception
 	 */
-    public function __construct($application)
+    public function __construct($configuration, $isAuthenticated)
     {
-    	$this->application = $application;
-        $this->configuration = $this->application->getConfiguration()->getConfig();
+        $this->configuration = $configuration;
 
-        $this->initializeRequest();
+        $this->initializeRequest($isAuthenticated);
+		$this->validateRequest();
         $this->initializeCommandAndAction();
-
-        $this->handleRequest();
     }
 
     /**
      * Initializes the request
+	 *
+	 * @param bool $isAuthenticated
      */
-    private function initializeRequest()
+    private function initializeRequest($isAuthenticated)
     {
         $this->request = new \CENSUS\Model\Request();
 
         $this->request->setParams($_GET);
         $this->request->setArguments($_REQUEST);
+
+		$this->request->set(['isAuthenticated' => $isAuthenticated]);
     }
-
-    /**
-     * Initializes the command
-     */
-    private function initializeCommandAndAction()
-    {
-        $this->command = ($this->request->hasArgument('cmd')) ? $this->request->getArgument('cmd') : null;
-        $this->action = ($this->request->hasArgument('action')) ? $this->request->getArgument('action') : null;
-    }
-
-    /**
-     * Handles the request
-     * and makes an instance of the
-     * requested command controller
-	 *
-	 * @throws \CENSUS\Core\Exception
-     */
-    private function handleRequest()
-    {
-		$this->validateRequest();
-		$this->setDefaultCommandAndAction();
-    }
-
-    private function setDefaultCommandAndAction()
-	{
-		if (true !== $this->application->getIsAuthenticated()) {
-			$this->command = 'authentication';
-			$this->action = 'login';
-		}
-
-		/*
-		 * by default, the dashboard is loaded if no command is set
-		 */
-		if (null == $this->command) {
-			$this->command = 'backend';
-		}
-	}
 
 	/**
 	 * Validate the request
@@ -105,17 +57,43 @@ class Request
 	 * @throws \CENSUS\Core\Exception
 	 * @todo add more validation
 	 */
-    private function validateRequest()
+	private function validateRequest()
+	{
+		$command = $this->request->getArgument('cmd');
+
+		if (null !== $command) {
+			if ($commandWhitelistArray = $this->configuration['cms']['controllerAction']) {
+				if (!array_key_exists($command, $commandWhitelistArray)) {
+					throw new \CENSUS\Core\Exception('Command ' . $command . ' is not allowed', \CENSUS\Core\Exception::ERR_NOT_ALLOWED);
+				}
+			} else {
+				throw new \CENSUS\Core\Exception('Configuration error', \CENSUS\Core\Exception::ERR_ABORT);
+			}
+		}
+	}
+
+    /**
+     * Initializes the command
+     */
+    private function initializeCommandAndAction()
     {
-        if (null !== $this->command) {
-            if ($commandWhitelistArray = $this->configuration['cms']['controllerAction']) {
-                if (!array_key_exists($this->command, $commandWhitelistArray)) {
-                    throw new \CENSUS\Core\Exception('Command ' . $this->command . ' is not allowed', \CENSUS\Core\Exception::ERR_NOT_ALLOWED);
-                }
-            } else {
-                throw new \CENSUS\Core\Exception('Configuration error', \CENSUS\Core\Exception::ERR_ABORT);
-            }
-        }
+		if (false === $this->request->getArgument('isAuthenticated')) {
+			$this->request->set(
+				[
+					'cmd' => 'authentication',
+					'action' => 'login'
+				]
+			);
+		} else {
+			if (null == $this->command) {
+				$this->request->set(
+					[
+						'cmd' => 'backend',
+						'action' => 'dashboard'
+					]
+				);
+			}
+		}
     }
 
     /**
@@ -126,25 +104,5 @@ class Request
     public function getRequest()
     {
         return $this->request;
-    }
-
-    /**
-     * Get the current command
-     *
-     * @return string|null
-     */
-    public function getCommand()
-    {
-        return $this->command;
-    }
-
-    /**
-     * Get the current action
-     *
-     * @return null
-     */
-    public function getAction()
-    {
-        return $this->action;
     }
 }

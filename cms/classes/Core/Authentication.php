@@ -82,6 +82,8 @@ class Authentication
 
 			unset ($localUserData);
 		}
+
+
     }
 
 	/**

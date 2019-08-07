@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>census CMS - {% block pagetitle %}{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="assets/stylesheets/backend.css" />
+</head>
+<body>
+	<div class="cms__top">
+		<small><a href="/backend/">Dashboard</a> | census 0.0.1-dev</small>
+	</div>
+	<aside>
+		{% block navigation %}{% endblock %}
+	</aside>
+	<main>
+		{% block main %}{% endblock %}
+	</main>
+</body>
+</html>

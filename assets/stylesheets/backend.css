@@ -61,6 +61,22 @@ main {
   color: #fff;
 }
 
+.cms__columns:after {
+  content: '';
+  clear: both;
+  display: block;
+}
+
+.cms__sidebar {
+  float: left;
+  width: 20%;
+}
+
+.cms__body {
+  float: left;
+  width: 80%;
+}
+
 nav ul,
 nav li {
   list-style: none;
@@ -87,13 +103,19 @@ nav > ul > li > ul {
 nav > ul > li > ul > li a {
   color: #005082;
   display: block;
+  font-size: 14px;
   padding: 10px 0 10px 25px;
   text-decoration: none;
+  text-transform: uppercase;
 }
 
 nav > ul > li > ul > li a:hover, nav > ul > li > ul > li a.active {
   background: #fff;
   color: #005082;
+}
+
+nav > ul > li > ul > li a:before {
+  display: inline-block;
 }
 
 /*# sourceMappingURL=backend.css.map */
