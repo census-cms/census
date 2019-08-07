@@ -30,14 +30,6 @@ class View
 	 */
     private $arguments = [];
 
-	/**
-	 * The layout
-	 *
-	 *
-	 * @var string
-	 */
-    private $layout = 'backend.html';
-
     /**
      * Twig
      *
@@ -57,6 +49,7 @@ class View
         $this->request = $request;
 
         $this->initializeView();
+        $this->registerGlobals();
     }
 
 	/**
@@ -69,20 +62,36 @@ class View
 	}
 
 	/**
+	 * Register the global variables for Twig
+	 */
+	private function registerGlobals()
+	{
+		$this->twig->addGlobal('CMS__navigation', (new \CENSUS\Core\View\Globals\Navigation())->getArguments());
+	}
+
+	/**
 	 * Get the requested template by action or module
 	 *
 	 * @return string
 	 */
-	private function getLayoutByRequest()
+	public function getLayoutByRequest()
 	{
 		$module = $this->request->getArgument('mod');
 		$template = 'controller/' . $this->request->getArgument('cmd') . DIRECTORY_SEPARATOR . $this->request->getArgument('action');
 
-		if (null !== $module) {
-			$template = 'module/' . $module;
+		if (null !== $module && file_exists(TEMPLATE_DIR . 'module/' . $module . '/index.html')) {
+			$template = 'module/' . $module . '/index';
 		}
 
 		return $template . '.html';
+	}
+
+	/**
+	 * @return \Twig\Environment
+	 */
+	public function getTwig()
+	{
+		return $this->twig;
 	}
 
 	/**

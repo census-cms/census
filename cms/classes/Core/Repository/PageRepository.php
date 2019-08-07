@@ -19,8 +19,6 @@ class PageRepository extends AbstractRepository
 	private function initializePagetree()
 	{
 		$this->pagetree = $this->getTree();
-
-		var_dump($this->pagetree);
 	}
 
 	private function getTree()

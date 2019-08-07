@@ -56,6 +56,7 @@ class Application
 		$this->request = (new \CENSUS\Core\Request($this->configuration->getConfig(), $this->session->isAuthenticated()))->getRequest();
 
 		$this->initializeController();
+		$this->initializeModule();
 
         $this->flushOutputBuffering();
 	}
@@ -67,14 +68,14 @@ class Application
 	{
 		$command = (false === $this->session->isAuthenticated()) ? 'Authentication' : ucfirst($this->request->getArgument('cmd'));
 
-		$requestedCommandControllerClass = '\\CENSUS\\Core\\Controller\\' . $command . 'Controller';
+		\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Controller\\' . $command . 'Controller', [$this->request, $this]);
+	}
 
-		if (class_exists($requestedCommandControllerClass)) {
-			new $requestedCommandControllerClass(
-				$this->request,
-				$this
-			);
-		}
+	private function initializeModule()
+	{
+		$command = (false === $this->session->isAuthenticated()) ? 'Authentication' : ucfirst($this->request->getArgument('mod'));
+
+		\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Module\\' . $command . 'Module', [$this->configuration->getConfig()]);
 	}
 
 	/**

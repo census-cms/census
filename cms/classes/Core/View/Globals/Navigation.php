@@ -1,5 +1,5 @@
 <?php
-namespace CENSUS\Core\View\Block;
+namespace CENSUS\Core\View\Globals;
 
 /**
  * Class Resources
@@ -17,17 +17,9 @@ class Navigation
 	private $moduleConfig = [];
 
 	/**
-	 * Resources constructor
-	 */
-	public function __construct ()
-	{
-		$this->initializeNavigation();
-	}
-
-	/**
 	 * Initialize the navigation
 	 */
-	private function initializeNavigation()
+	public function __construct()
 	{
 		$this->moduleConfig = include CONFIG_DIR . 'Modules.php';
 	}
@@ -37,14 +29,12 @@ class Navigation
 	 *
 	 * @return array
 	 */
-	public function getList()
+	public function getArguments()
 	{
-		$navigation = [
-			'categories' => [],
-		];
+		$navigation = [];
 
 		foreach ($this->moduleConfig as $key => $category) {
-			$navigation['categories'][] = [
+			$navigation[] = [
 				'label' => ucfirst($key),
 				'modules' => $this->getModuleNav($key, $category)
 			];

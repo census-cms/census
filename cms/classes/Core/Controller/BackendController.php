@@ -27,6 +27,7 @@ class BackendController extends CommandController
 
 	protected function dashboardAction()
 	{
+		$this->view->assign(['dddd' => 'eeee']);
 	}
 
 	protected function moduleAction()

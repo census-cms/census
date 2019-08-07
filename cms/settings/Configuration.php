@@ -8,10 +8,10 @@
 
 define('BASE_DIR', $baseDir . DIRECTORY_SEPARATOR);
 define('CONFIG_DIR', __DIR__ . DIRECTORY_SEPARATOR);
-define('STORAGE_DIR', realpath($baseDir . 'storage/'));
-define('PLUGIN_DIR', realpath(STORAGE_DIR . 'plugins/'));
-define('TEMPLATE_DIR', realpath(CONFIG_DIR . '../templates/'));
-define('ASSETS_DIR', realpath(CONFIG_DIR . '../assets/'));
+define('STORAGE_DIR', realpath($baseDir . 'storage') . DIRECTORY_SEPARATOR);
+define('PLUGIN_DIR', realpath(STORAGE_DIR . 'plugins') . DIRECTORY_SEPARATOR);
+define('TEMPLATE_DIR', realpath(CONFIG_DIR . '../templates') . DIRECTORY_SEPARATOR);
+define('ASSETS_DIR', realpath(CONFIG_DIR . '../assets') . DIRECTORY_SEPARATOR);
 
 return [
     'pagetreeRoot' => 'page',
