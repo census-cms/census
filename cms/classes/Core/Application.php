@@ -23,7 +23,7 @@ class Application
 	/**
 	 * @var \CENSUS\Core\View
 	 */
-    protected $view = null;
+    private $view = null;
 
 	/**
 	 * @var \Composer\Autoload\ClassLoader
