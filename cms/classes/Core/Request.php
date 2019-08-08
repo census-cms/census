@@ -85,7 +85,7 @@ class Request
 				]
 			);
 		} else {
-			if (null == $this->command) {
+			if (null == $this->request->getArgument('cmd')) {
 				$this->request->set(
 					[
 						'cmd' => 'backend',

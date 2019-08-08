@@ -7,7 +7,7 @@ abstract class AbstractModule
 	/**
 	 * @var \CENSUS\Model\Request
 	 */
-	private $request = null;
+	protected $request = null;
 
 	/**
 	 * @var \CENSUS\Core\View

@@ -52,14 +52,20 @@ class Application
 		$this->configuration = new \CENSUS\Core\Configuration($this);
 		$this->configuration->initializeConfiguration($baseDir);
 
-		//$this->fileBase = new \CENSUS\Core\FileBase($this->configuration->getConfigByKey('pagetreeRoot'));
-		$this->request = (new \CENSUS\Core\Request($this->configuration->getConfig(), $this->session->isAuthenticated()))->getRequest();
-
+		$this->initializeRequest();
 		$this->initializeView();
 		$this->initializeController();
 		$this->initializeModule();
 
         $this->flushOutputBuffering();
+	}
+
+	/**
+	 * Initialize the request
+	 */
+	private function initializeRequest()
+	{
+		$this->request = (new \CENSUS\Core\Request($this->configuration->getConfig(), $this->session->isAuthenticated()))->getRequest();
 	}
 
 	/**
@@ -85,9 +91,18 @@ class Application
 	 */
 	private function initializeModule()
 	{
-		$command = (false === $this->session->isAuthenticated()) ? 'Authentication' : ucfirst($this->request->getArgument('mod'));
+		if (true === $this->session->isAuthenticated()) {
+			$module = ucfirst($this->request->getArgument('mod'));
+			\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Module\\' . $module, [$this->request, $this->view, $this->configuration->getConfig()]);
+		}
+	}
 
-		\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Module\\' . $command, [$this->request, $this->view, $this->configuration->getConfig()]);
+	/**
+	 * Initialize the logout
+	 */
+	public function initializeLogout()
+	{
+		$this->session->logout();
 	}
 
 	/**
@@ -123,23 +138,5 @@ class Application
 	public function getConfiguration()
 	{
 		return $this->configuration;
-	}
-
-	/**
-	 * Get the FileBase
-	 * 
-	 * @return \CENSUS\Core\FileBase
-	 */
-	public function getFileBase()
-	{
-		return $this->fileBase;
-	}
-
-	/**
-	 * Initialize the logout command
-	 */
-	public function initializeLogout()
-	{
-		$this->session->logout();
 	}
 }

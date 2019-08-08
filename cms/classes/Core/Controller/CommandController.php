@@ -69,13 +69,13 @@ abstract class CommandController
 		$this->command = $this->request->getArgument('cmd');
 		$this->action = $this->request->getArgument('action');
 
-		$this->callDefaultAction();
+		$this->initializeControllerAction();
     }
 
     /**
-     * Call the default action if set
+     * Initialize the controller => action
      */
-    private function callDefaultAction()
+    private function initializeControllerAction()
     {
 		if (method_exists($this, 'initializeAction')) {
 			$this->initializeAction();
@@ -89,7 +89,11 @@ abstract class CommandController
 			} else {
 				$actionMethodName = $this->request->getArgument('action') . 'Action';
 			}
-        }
+        } else {
+        	if (!empty($this->request->getParams())) {
+				$this->redirect('/backend/');
+			}
+		}
 
 		$this->$actionMethodName();
     }
@@ -103,6 +107,7 @@ abstract class CommandController
 	private function getDefaultAction()
 	{
 		$actions = $this->configuration[$this->context]['controllerAction'][$this->command];
+
 		return (isset($actions[0])) ? $actions[0] : null;
 	}
 

@@ -24,7 +24,12 @@ class Page extends AbstractModule
 	{
 		$this->pageRepository = new \CENSUS\Core\Repository\PageRepository($this->configuration['pagetreeRoot']);
 
-		$this->view->assign(['pagetree' => $this->pageRepository->getTree()]);
+		$this->view->assign(
+			[
+				'pagetree' => $this->pageRepository->getTree(),
+				'currentDir' => $this->request->getArgument('dir')
+			]
+		);
 	}
 
 	/**

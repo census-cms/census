@@ -34,7 +34,8 @@ return [
 	'view' => [
 		'templatePaths' => [
 			TEMPLATE_DIR
-		]
+		],
+		'debug' => true
 	],
     'session' => [
         'expires' => '3600*2'

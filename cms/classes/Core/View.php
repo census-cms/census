@@ -30,6 +30,13 @@ class View
 	 */
     private $arguments = [];
 
+	/**
+	 * Layout path
+	 *
+	 * @var string
+	 */
+    private $layout = '';
+
     /**
      * Twig
      *
@@ -49,6 +56,7 @@ class View
         $this->request = $request;
 
         $this->initializeView();
+        $this->initializeLayout();
         $this->registerGlobals();
     }
 
@@ -58,9 +66,31 @@ class View
     private function initializeView()
 	{
 		$loader = new \Twig\Loader\FilesystemLoader($this->configuration['templatePaths']);
-		$this->twig = new \Twig\Environment($loader, ['debug' => true]);
+		$this->twig = new \Twig\Environment($loader, ['debug' => $this->configuration['debug']]);
 
-		$this->twig->addExtension(new \Twig\Extension\DebugExtension());
+		if (true === $this->configuration['debug']) {
+			$this->twig->addExtension(new \Twig\Extension\DebugExtension());
+		}
+	}
+
+	private function initializeLayout()
+	{
+		$module = $this->request->getArgument('mod');
+		$context = $this->request->getArgument('context');
+
+		$layout = 'controller/' . $this->request->getArgument('cmd') . DIRECTORY_SEPARATOR . $this->request->getArgument('action');
+
+		if (true === $this->request->getArgument('isAuthenticated')) {
+			if (null !== $module && file_exists(TEMPLATE_DIR . 'module/' . $module . '/index.html')) {
+				$layout = 'module/' . $module . '/index';
+			}
+
+			if (null !== $context && file_exists(TEMPLATE_DIR . 'module/' . $module . '/' . $context .  '.html')) {
+				$layout = 'module/' . $module . '/' . $context;
+			}
+		}
+
+		$this->setLayout($layout);
 	}
 
 	/**
@@ -72,25 +102,23 @@ class View
 	}
 
 	/**
-	 * Get the requested template by action or module
+	 * Get the layout
 	 *
 	 * @return string
 	 */
-	public function getLayoutByRequest()
+	public function getLayout()
 	{
-		$module = $this->request->getArgument('mod');
-		$context = $this->request->getArgument('context');
-		$template = 'controller/' . $this->request->getArgument('cmd') . DIRECTORY_SEPARATOR . $this->request->getArgument('action');
+		return $this->layout . '.html';
+	}
 
-		if (null !== $module && file_exists(TEMPLATE_DIR . 'module/' . $module . '/index.html')) {
-			$template = 'module/' . $module . '/index';
-		}
-
-		if (null !== $context && file_exists(TEMPLATE_DIR . 'module/' . $module . '/' . $context .  '.html')) {
-			$template = 'module/' . $module . '/' . $context;
-		}
-
-		return $template . '.html';
+	/**
+	 * Set the layout
+	 *
+	 * @param string $layout
+	 */
+	public function setLayout($layout)
+	{
+		$this->layout = $layout;
 	}
 
 	/**
@@ -112,6 +140,6 @@ class View
 	 */
 	public function __destruct()
 	{
-		echo $this->twig->render($this->getLayoutByRequest(), $this->arguments);
+		echo $this->twig->render($this->getLayout(), $this->arguments);
 	}
 }

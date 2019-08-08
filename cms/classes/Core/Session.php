@@ -25,8 +25,8 @@ class Session
      */
     private function initializeSession()
     {
-    	if (empty(session_id())) {
-    		unset($_SESSION['censuscms']);
+    	if (empty(session_id()) && isset($_SESSION['censuscms'])) {
+			$this->logout();
 		}
 
 		//$domain = isset($domain) ? $domain : isset($_SERVER['SERVER_NAME']);
@@ -71,6 +71,10 @@ class Session
      */
     public function logout()
     {
-        session_destroy();
+        @session_destroy();
+
+        if (isset($_SESSION['censuscms'])) {
+			unset($_SESSION['censuscms']);
+		}
     }
 }
