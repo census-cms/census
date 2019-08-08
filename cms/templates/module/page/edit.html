@@ -11,7 +11,15 @@
 			<fieldset>
 				<div class="form-row">
 					<label for="pageTitle">Title</label>
-					<input type="text" name="page[title]" id="pageTitle" />
+					<input type="text" name="page[title]" id="pageTitle"{% if pageData.realname %} value="{{ pageData.realname }}"{% endif %} />
+				</div>
+				<div class="form-row">
+					<label for="pageDescription">Description</label>
+					<textarea name="page[description]" id="pageDescription">{% if pageData.description %}{{ pageData.description }}{% endif %}</textarea>
+				</div>
+				<div class="form-row">
+					<label for="pageRoot">Is Root</label>
+					<input type="checkbox" name="page[root]" id="pageRoot"{% if pageData.root %} checked="checked"{% endif %} />
 				</div>
 			</fieldset>
 		</form>

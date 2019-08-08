@@ -82,7 +82,6 @@ class Application
 	private function initializeController()
 	{
 		$command = (false === $this->session->isAuthenticated()) ? 'Authentication' : ucfirst($this->request->getArgument('cmd'));
-
 		\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Controller\\' . $command . 'Controller', [$this->request, $this->view, $this]);
 	}
 

@@ -18,6 +18,13 @@ class Page extends AbstractModule
 	private $pageRepository = null;
 
 	/**
+	 * Contains information if a page in the tree is selected
+	 *
+	 * @var array
+	 */
+	private $selectedPage = [];
+
+	/**
 	 * Initialize the module
 	 */
 	protected function initializeModule()
@@ -55,5 +62,31 @@ class Page extends AbstractModule
 	 */
 	protected function editContext()
 	{
+		$pagePath = $this->getPagePath();
+
+		$pageData = $this->pageRepository->getData($pagePath);
+
+		// @todo add content data
+
+		$this->view->assign(
+			[
+				'pageData' => $pageData
+			]
+		);
+	}
+
+
+
+	/**
+	 * Get the current page path in page tree
+	 *
+	 * @return string
+	 */
+	private function getPagePath()
+	{
+		$parent = (null !== $this->request->getArgument('parent')) ? urldecode($this->request->getArgument('parent')) : '';
+		$dir = $this->request->getArgument('dir');
+
+		return realpath(BASE_DIR . 'page/' . $parent . DIRECTORY_SEPARATOR . $dir) . DIRECTORY_SEPARATOR;
 	}
 }

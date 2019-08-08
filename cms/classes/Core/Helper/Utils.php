@@ -39,4 +39,15 @@ class Utils
 			// @todo log, do not throw an exception
 		}
 	}
+
+	/**
+	 * Get a JSON string parsed to an array
+	 *
+	 * @param string $json
+	 * @return array
+	 */
+	public static function getJsonToArray($json)
+	{
+		return json_decode($json, true);
+	}
 }

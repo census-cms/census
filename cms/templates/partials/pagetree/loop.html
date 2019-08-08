@@ -1,0 +1,10 @@
+{% if pages %}
+	<ul>
+		{% for subpage in pages %}
+		<li{% if currentDir and currentDir == subpage.dir %} class="current"{% endif %}>
+			<a href="?mod=page&context=edit&dir={{ subpage.dir }}&parent={{ subpage.parent | url_encode}}">{{ subpage.realname }}</a>
+			{% include 'partials/pagetree/loop.html' with {'pages': subpage._sub, 'currentDir': currentDir} %}
+		</li>
+		{% endfor %}
+	</ul>
+{% endif %}

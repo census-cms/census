@@ -88,6 +88,15 @@ class Request
 					]
 				);
 			}
+
+			if (null == $this->request->getArgument('mod')) {
+				$this->request->set(
+					[
+						'cmd' => 'backend',
+						'action' => 'module'
+					]
+				);
+			}
 		}
     }
 

@@ -3,35 +3,9 @@
 
 	<ul>
 		{% for page in pagetree %}
-		<li>
-			<a href="?cmd=backend&action=module&mod=page&context=edit&dir={{ page.dir }}">{{ page.realname }}</a>
-			{% if page._sub %}
-			<ul>
-				{% for subpage in page._sub %}
-				<li>
-					<a href="?cmd=backend&action=module&mod=page&context=edit&dir={{ subpage.dir }}">{{ subpage.realname }}</a>
-					{% if subpage._sub %}
-					<ul>
-						{% for subpage2 in subpage._sub %}
-						<li>
-							<a href="?cmd=backend&action=module&mod=page&context=edit&dir={{ subpage2.dir }}">{{ subpage2.realname }}</a>
-							{% if subpage2._sub %}
-							<ul>
-								{% for subpage3 in subpage2._sub %}
-								<li>
-									<a href="?cmd=backend&action=module&mod=page&context=edit&dir={{ subpage3.dir }}">{{ subpage3.realname }}</a>
-								</li>
-								{% endfor %}
-							</ul>
-							{% endif %}
-						</li>
-						{% endfor %}
-					</ul>
-					{% endif %}
-				</li>
-				{% endfor %}
-			</ul>
-			{% endif %}
+		<li{% if currentDir and currentDir == page.dir %} class="current"{% endif %}{% if page.root %} data-root="1"{% endif %}>
+			<a href="?mod=page&context=edit&dir={{ page.dir }}&parent={{ page.parent | url_encode}}">{{ page.realname }}</a>
+			{% include 'partials/pagetree/loop.html' with {'pages': page._sub, 'currentDir': currentDir} only %}
 		</li>
 		{% endfor %}
 	</ul>

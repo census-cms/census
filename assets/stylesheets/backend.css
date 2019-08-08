@@ -3,6 +3,7 @@ html, body {
 }
 
 body {
+  font-size: 14px;
   margin: 0;
   padding: 0;
 }
@@ -14,7 +15,8 @@ header {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   margin: 0;
   padding: 0;
 }
@@ -35,7 +37,7 @@ main {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   float: left;
-  height: 100%;
+  height: calc(100% - 30px);
 }
 
 aside {
@@ -46,8 +48,19 @@ aside {
 
 main {
   color: #333;
-  padding: 50px 25px 25px 25px;
   width: 85%;
+}
+
+main h1,
+main h2,
+main h3,
+main h4,
+main h5 {
+  margin-bottom: 25px;
+}
+
+main p {
+  margin: 0 0 15px 0;
 }
 
 .cms__top {
@@ -61,6 +74,10 @@ main {
   color: #fff;
 }
 
+.cms__columns {
+  height: 100%;
+}
+
 .cms__columns:after {
   content: '';
   clear: both;
@@ -68,77 +85,114 @@ main {
 }
 
 .cms__sidebar {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #ccc;
+  color: #fff;
   float: left;
+  height: 100%;
+  padding: 50px 0 0 25px;
   width: 20%;
 }
 
 .cms__body {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   float: left;
+  padding: 50px 25px 25px 25px;
   width: 80%;
 }
 
-nav ul,
-nav li {
+.has__fullwidth {
+  width: 100%;
+}
+
+nav:not(.pagetree) ul,
+nav:not(.pagetree) li {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-nav > ul > li h4 {
+nav:not(.pagetree) ul a,
+nav:not(.pagetree) li a {
+  color: #005082;
+  text-decoration: none;
+}
+
+nav:not(.pagetree) > ul > li h4 {
   color: #fff;
   border-bottom: 1px dotted #fff;
   margin: 0;
   text-transform: uppercase;
 }
 
-nav > ul > li h4:before {
+nav:not(.pagetree) > ul > li h4:before {
   content: '';
   padding: 0 0 0 25px;
 }
 
-nav > ul > li > ul {
+nav:not(.pagetree) > ul > li > ul {
   margin: 0 0 25px 0;
 }
 
-nav > ul > li > ul > li a {
-  color: #005082;
+nav:not(.pagetree) > ul > li > ul > li a {
   display: block;
-  font-size: 14px;
   padding: 10px 0 10px 25px;
-  text-decoration: none;
   text-transform: uppercase;
 }
 
-nav > ul > li > ul > li a:hover, nav > ul > li > ul > li a.active {
+nav:not(.pagetree) > ul > li > ul > li a:hover, nav:not(.pagetree) > ul > li > ul > li a.active {
   background: #fff;
   color: #005082;
 }
 
-nav > ul > li > ul > li a:before {
+nav:not(.pagetree) > ul > li > ul > li a:before {
   display: inline-block;
 }
 
+.pagetree ul,
 .pagetree li {
-  padding: 4px 0 0 0;
-}
-
-.pagetree li a {
+  list-style: none;
+  margin: 0;
   padding: 0;
 }
 
-.pagetree li a:before {
+.pagetree li a {
+  color: #333;
+  display: inline-block;
+  padding: 4px 0;
+  text-decoration: none;
+}
+
+.pagetree li.current > a {
+  color: #005082;
+  font-weight: bold;
+}
+
+.pagetree li:before {
   background-image: url("../icomoon/svg/037-file-empty.svg");
   background-size: cover;
   content: '';
   display: inline-block;
   height: 16px;
   margin-right: 5px;
-  vertical-align: baseline;
+  vertical-align: top;
   width: 16px;
+}
+
+.pagetree li[data-root]:before {
+  background-image: url("../icomoon/svg/189-tree.svg");
 }
 
 .pagetree > ul > li > ul {
   padding-left: 10px;
+}
+
+.pagetree > ul > li > ul > li a {
+  text-transform: none;
 }
 
 .pagetree > ul > li > ul > li > ul {

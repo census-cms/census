@@ -6,31 +6,42 @@ class PageRepository extends AbstractRepository
 {
 	private $pagetree = [];
 
+	/**
+	 * Initialize the repository
+	 */
 	public function initializeRepository()
 	{
 		$this->pagetree = $this->getTree();
 	}
 
+	/**
+	 * Get the page tree
+	 *
+	 * @return mixed
+	 */
 	public function getTree()
 	{
-		$tree = include BASE_DIR . $this->getStorage() . '/tree.php';
+		$json = file_get_contents(BASE_DIR . $this->getStorage() . '/tree.json');
+		$tree = \CENSUS\Core\Helper\Utils::getJsonToArray($json);
+
 		return $tree;
 	}
 
-	private function buildTree($directory, &$tree = [])
+	/**
+	 * Get data from a page
+	 *
+	 * @param string $path
+	 * @return null|array
+	 */
+	public function getData($path)
 	{
-		foreach (scandir($directory) as $content) {
-			if (is_dir($content)) {
-				$tree[] = $content;
+		$file = $path . 'meta.json';
+		$data = null;
 
-				$subDir = $directory . DIRECTORY_SEPARATOR . $content;
-
-				if (is_dir($subDir)) {
-
-				}
-			}
+		if (file_exists($file)) {
+			$data = \CENSUS\Core\Helper\Utils::getJsonToArray(file_get_contents($file));
 		}
 
-		var_dump($tree);
+		return $data;
 	}
 }

@@ -1,9 +1,14 @@
-nav {
+nav:not(.pagetree) {
 	ul,
 	li {
 		list-style: none;
 		margin: 0;
 		padding: 0;
+
+		a {
+			color: $blue-flat;
+			text-decoration: none;
+		}
 	}
 
 	> ul {
@@ -25,11 +30,8 @@ nav {
 
 				> li {
 					a {
-						color: $blue-flat;
 						display: block;
-						font-size: 14px;
 						padding: $space-small 0 $space-small $tpl-space-left;
-						text-decoration: none;
 						text-transform: uppercase;
 
 						&:hover,

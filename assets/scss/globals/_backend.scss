@@ -11,7 +11,7 @@ main {
 	@include box-sizing(border-box);
 
 	float: left;
-	height: 100%;
+	height: $content-height;
 }
 
 aside {
@@ -22,8 +22,19 @@ aside {
 
 main {
 	color: $font-color;
-	padding: $tpl-space-top $tpl-space-left $tpl-space-left $tpl-space-left;
 	width: 85%;
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5 {
+		margin-bottom: $space-large;
+	}
+
+	p {
+		margin: 0 0 $space-medium 0;
+	}
 }
 
 .cms {
@@ -39,18 +50,35 @@ main {
 	}
 
 	&__columns {
+		height: 100%;
+
 		&:after {
 			@include clearfix();
 		}
 	}
 
 	&__sidebar {
+		@include box-sizing(border-box);
+
+		background: $grey-light;
+		color: $white;
 		float: left;
+		height: 100%;
+		padding: $tpl-space-top 0 0 $tpl-space-left;
 		width: 20%;
 	}
 
 	&__body {
+		@include box-sizing(border-box);
+
 		float: left;
+		padding: $tpl-space-top $tpl-space-left $tpl-space-left $tpl-space-left;
 		width: 80%;
+	}
+}
+
+.has {
+	&__fullwidth {
+		width: 100%;
 	}
 }

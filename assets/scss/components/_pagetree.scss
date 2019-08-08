@@ -1,19 +1,40 @@
 .pagetree {
+	ul,
 	li {
-		padding: 4px 0 0 0;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
 
+	li {
 		a {
-			padding: 0;
+			color: $grey-ultra-dark;
+			display: inline-block;
+			padding: 4px 0;
+			text-decoration: none;
+		}
 
+		&.current {
+			> a {
+				color: $blue-flat;
+				font-weight: bold;
+			}
+		}
+
+		&:before {
+			background-image: url('../icomoon/svg/037-file-empty.svg');
+			background-size: cover;
+			content: '';
+			display: inline-block;
+			height: 16px;
+			margin-right: 5px;
+			vertical-align: top;
+			width: 16px;
+		}
+
+		&[data-root] {
 			&:before {
-				background-image: url('../icomoon/svg/037-file-empty.svg');
-				background-size: cover;
-				content: '';
-				display: inline-block;
-				height: 16px;
-				margin-right: 5px;
-				vertical-align: baseline;
-				width: 16px;
+				background-image: url('../icomoon/svg/189-tree.svg');
 			}
 		}
 	}
@@ -24,6 +45,10 @@
 				padding-left: $space-small;
 
 				> li {
+					a {
+						text-transform: none;
+					}
+
 					> ul {
 						padding-left: $space-small * 2;
 					}
