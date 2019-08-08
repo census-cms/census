@@ -9,11 +9,6 @@ class Request
     private $request = null;
 
 	/**
-	 * @var \CENSUS\Core\Application
-	 */
-    private $application = null;
-
-	/**
 	 * Configuration array
 	 *
 	 * @var array
