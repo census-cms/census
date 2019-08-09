@@ -50,7 +50,7 @@ class Navigation
 	 * @param array $entries
 	 * @return array
 	 */
-	private function getModuleNav($category, $entries)
+	private function getModuleNav(string $category, array $entries)
 	{
 		$moduleLinks = [];
 

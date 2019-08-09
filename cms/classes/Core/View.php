@@ -50,7 +50,7 @@ class View
 	 * @param \CENSUS\Model\Request $request
 	 * @param array $configuration
 	 */
-    public function __construct($request, $configuration)
+    public function __construct(\CENSUS\Model\Request $request, array $configuration)
     {
         $this->configuration = $configuration;
         $this->request = $request;
@@ -116,7 +116,7 @@ class View
 	 *
 	 * @param string $layout
 	 */
-	public function setLayout($layout)
+	public function setLayout(string $layout)
 	{
 		$this->layout = $layout;
 	}
@@ -126,7 +126,7 @@ class View
 	 *
 	 * @param array $arguments
 	 */
-	public function assign($arguments)
+	public function assign(array $arguments)
 	{
 		$this->arguments = array_merge($this->arguments, $arguments);
 	}

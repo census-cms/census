@@ -20,7 +20,12 @@ abstract class AbstractRepository
 	 */
 	private $storage = '';
 
-	public function __construct ($storage = STORAGE_DIR)
+	/**
+	 * AbstractRepository constructor
+	 *
+	 * @param string $storage
+	 */
+	public function __construct (string $storage = STORAGE_DIR)
 	{
 		$this->storage = $storage;
 
@@ -31,6 +36,9 @@ abstract class AbstractRepository
 		}
 	}
 
+	/**
+	 * Initialize Model with same namespace
+	 */
 	private function initializeModel()
 	{
 		$splitNamespace = explode('\\', get_called_class());
@@ -42,6 +50,11 @@ abstract class AbstractRepository
 		}
 	}
 
+	/**
+	 * Get the storage
+	 *
+	 * @return string
+	 */
 	protected function getStorage()
 	{
 		return $this->storage;

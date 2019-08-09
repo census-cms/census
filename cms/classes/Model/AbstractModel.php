@@ -29,7 +29,7 @@ abstract class AbstractModel
 	 * @param string $identifier
 	 * @return AbstractModel
 	 */
-	protected function setIdentifier($identifier)
+	protected function setIdentifier(string $identifier)
 	{
 		$this->identifier = $identifier;
 		return $this;
@@ -51,7 +51,7 @@ abstract class AbstractModel
 	 * @param string $path
 	 * @return AbstractModel
 	 */
-	protected function setPath($path)
+	protected function setPath(string $path)
 	{
 		$this->path = $path;
 		return $this;
@@ -72,7 +72,7 @@ abstract class AbstractModel
 	 *
 	 * @param string $file
 	 */
-	public function __construct($file = '')
+	public function __construct(string $file = '')
 	{
 		if (!empty($file)) {
 			preg_match_all('/\[.*\]/', basename($file), $fileBaseInfo);

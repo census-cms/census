@@ -33,7 +33,7 @@ class PageRepository extends AbstractRepository
 	 * @param string $path
 	 * @return null|array
 	 */
-	public function getData($path)
+	public function getData(string $path)
 	{
 		$file = $path . 'meta.json';
 		$data = null;

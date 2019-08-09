@@ -27,7 +27,7 @@ class Utils
 	 * @param string $className
 	 * @param array|null $params
 	 */
-	public static function newInstance($className, $params = null)
+	public static function newInstance(string $className, $params = null)
 	{
 		if (class_exists($className)) {
 			$newReflectionClass = new \ReflectionClass($className);
@@ -46,7 +46,7 @@ class Utils
 	 * @param string $json
 	 * @return array
 	 */
-	public static function getJsonToArray($json)
+	public static function getJsonToArray(string $json)
 	{
 		return json_decode($json, true);
 	}

@@ -40,10 +40,8 @@ class Configuration
 
 	/**
 	 * Initialize the config
-	 *
-	 * @param string $baseDir
 	 */
-	public function initializeConfiguration($baseDir)
+	public function initializeConfiguration()
 	{
 		$this->configArray = include $this->configFile;
 
@@ -69,7 +67,7 @@ class Configuration
 	 * @param string $key
 	 * @return array|string|false
 	 */
-	public function getConfigByKey($key)
+	public function getConfigByKey(string $key)
 	{
 		return (array_key_exists($key, $this->configArray)) ? $this->configArray[$key] : false;
 	}

@@ -25,18 +25,38 @@ class Yaml
 		$this->dumper = \CENSUS\Core\Helper\Utils::newInstance('\\Symfony\\Component\\Yaml\\Dumper');
 	}
 
-	public function parse()
+	/**
+	 * Parses a YAML string to a PHP value
+	 *
+	 * @param string $value
+	 * @param int $flags
+	 */
+	public function parse(string $value, int $flags = 0)
 	{
-		$this->parser->parse();
+		$this->parser->parse($value, $flags);
 	}
 
-	public function parseFile()
+	/**
+	 * Parses a YAML file into a PHP value
+	 *
+	 * @param string $filename
+	 * @param int $flags
+	 */
+	public function parseFile(string $filename, int $flags = 0)
 	{
-		$this->parser->parseFile();
+		$this->parser->parseFile($filename, $flags);
 	}
 
-	private function dump()
+	/**
+	 * Dumps a PHP value to YAML
+	 *
+	 * @param $input
+	 * @param int $inline
+	 * @param int $indent
+	 * @param int $flags
+	 */
+	private function dump($input, int $inline = 0, int $indent = 0, int $flags = 0)
 	{
-		$this->dumper->dump();
+		$this->dumper->dump($input, $inline, $indent, $flags);
 	}
 }

@@ -23,7 +23,7 @@ class Request
      *
      * @param array $params
      */
-    public function setParams($params)
+    public function setParams(array $params)
     {
         $this->params = $params;
     }
@@ -43,7 +43,7 @@ class Request
      *
      * @param array $arguments
      */
-    public function setArguments($arguments)
+    public function setArguments(array $arguments)
     {
         $this->arguments = $arguments;
     }
@@ -64,7 +64,7 @@ class Request
      * @param string $argument
      * @return bool
      */
-    public function hasArgument($argument)
+    public function hasArgument(string $argument)
     {
         return isset($this->arguments[$argument]);
     }
@@ -72,10 +72,10 @@ class Request
     /**
      * Get a requests argument
      *
-     * @param $argument
+     * @param string $argument
      * @return mixed|null
      */
-    public function getArgument($argument)
+    public function getArgument(string $argument)
     {
         return ($this->hasArgument($argument)) ? $this->arguments[$argument] : null;
     }
@@ -83,7 +83,7 @@ class Request
 	/**
 	 * @param array $arguments
 	 */
-    public function set($arguments)
+    public function set(array $arguments)
 	{
 		foreach ($arguments as $argument => $value) {
 			$this->arguments[$argument] = $value;

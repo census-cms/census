@@ -16,7 +16,7 @@ abstract class CommandController
      *
      * @var string
      */
-    protected $context = 'cms';
+    protected  $context = 'cms';
 
     /**
      * Requested command
@@ -55,11 +55,11 @@ abstract class CommandController
     /**
      * CommandController constructor
      *
-     * @param array $request
+     * @param \CENSUS\Model\Request $request
 	 * @param \CENSUS\Core\View $view
 	 * @param \CENSUS\Core\Application
      */
-    public function __construct($request, $view, $application)
+    public function __construct(\CENSUS\Model\Request $request, \CENSUS\Core\View $view, \CENSUS\Core\Application $application)
     {
         $this->request = $request;
         $this->view = $view;
@@ -127,14 +127,14 @@ abstract class CommandController
 	 * $location can be a string or an array with params[param1=foo, param2=bar]
 	 *
 	 * @param array|string $location
-	 * @param int $response
+	 * @param int $httpStatus
 	 */
-	public function redirect($location, $response = 301)
+	public function redirect(string $location, int $httpStatus = 301)
 	{
 		if (is_array($location)) {
 			$location = '?' . implode('&', $location);
 		}
 
-		header('Location: ' . $location, true, $response);
+		header('Location: ' . $location, true, $httpStatus);
 	}
 }

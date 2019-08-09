@@ -50,7 +50,7 @@ class Authentication
 	 * @param \CENSUS\Model\Request $request
 	 * @throws \CENSUS\Core\Exception
 	 */
-    public function __construct($request)
+    public function __construct(\CENSUS\Model\Request $request)
     {
 		if (!($request instanceof \CENSUS\Model\Request)) {
 			throw new \CENSUS\Core\Exception('Validation error, invalid Request', \CENSUS\Core\Exception::ERR_INVALID);
@@ -82,8 +82,6 @@ class Authentication
 
 			unset ($localUserData);
 		}
-
-
     }
 
 	/**
@@ -134,7 +132,7 @@ class Authentication
 	 * @param string $password
 	 * @return bool
 	 */
-    private function verifyPassword($password)
+    private function verifyPassword(string $password)
 	{
 		// @todo must be copied also into the user create
 		$hash = password_hash($this->request->getArgument('password'), PASSWORD_ARGON2I, ['memory_cost' => 2048, 'time_cost' => 4, 'threads' => 3]);
@@ -226,7 +224,7 @@ class Authentication
      * @param string $key
      * @param mixed $value
      */
-	private function addError($key, $value)
+	private function addError(string $key, $value)
     {
         $this->errors[$key] = $value;
     }
@@ -247,7 +245,7 @@ class Authentication
 	 * @param string $string
 	 * @return string
 	 */
-	private function getHash($string)
+	private function getHash(string $string)
 	{
 		return hash('sha256', $string);
 	}
@@ -257,7 +255,7 @@ class Authentication
 	 *
 	 * @param array $userData
 	 */
-    private function initializeSession($userData)
+    private function initializeSession(array $userData)
     {
         $_SESSION['censuscms'] = [
 			'name' => $userData['name'],

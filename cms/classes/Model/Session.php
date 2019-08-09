@@ -40,6 +40,11 @@ class Session
      */
     private $loginTime = 0;
 
+	/**
+	 * Session constructor
+	 *
+	 * @throws \CENSUS\Core\Exception
+	 */
     public function __construct()
     {
         list ($class, $caller) = debug_backtrace(false, 2);
@@ -69,7 +74,7 @@ class Session
      *
      * @param string $name
      */
-    private function setName($name)
+    private function setName(string $name)
     {
         $this->name = $name;
     }
@@ -79,7 +84,7 @@ class Session
      *
      * @param int $role
      */
-    private function setRole($role)
+    private function setRole(int $role)
     {
         $this->role = $role;
     }
@@ -89,7 +94,7 @@ class Session
      *
      * @param array $data
      */
-    private function setData($data)
+    private function setData(array $data)
     {
         $this->data = $data;
     }
@@ -99,7 +104,7 @@ class Session
      *
      * @param int $tstamp
      */
-    private function setLoginTime($tstamp)
+    private function setLoginTime(int $tstamp)
     {
         $this->loginTime = $tstamp;
     }

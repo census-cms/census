@@ -26,6 +26,11 @@ class Application
     private $view = null;
 
 	/**
+	 * @var \CENSUS\Core\Plugin\Registry
+	 */
+    private $pluginRegistry = null;
+
+	/**
 	 * @var \Composer\Autoload\ClassLoader
 	 */
 	private $classLoader = null;
@@ -56,6 +61,7 @@ class Application
 		$this->initializeView();
 		$this->initializeController();
 		$this->initializeModule();
+		$this->initializePluginRegistry();
 
         $this->flushOutputBuffering();
 	}
@@ -94,6 +100,11 @@ class Application
 			$module = ucfirst($this->request->getArgument('mod'));
 			\CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Module\\' . $module, [$this->request, $this->view, $this->configuration->getConfig()]);
 		}
+	}
+
+	private function initializePluginRegistry()
+	{
+		$this->pluginRegistry = \CENSUS\Core\Helper\Utils::newInstance('\\CENSUS\\Core\\Plugin\\Registry');
 	}
 
 	/**

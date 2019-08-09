@@ -1,6 +1,4 @@
 <?php
-
-
 namespace CENSUS\Core\Plugin;
 
 
@@ -16,15 +14,15 @@ class Registry
      */
     public function __construct()
     {
-        $this->setRegisteredPlugins();
+        $this->loadRegistry();
     }
 
     /**
      * Set the registered plugins
      */
-    private function setRegisteredPlugins()
+    private function loadRegistry()
     {
-        $registeredPluginsFile = STORAGE_DIR . 'plugins.php';
+        $registeredPluginsFile = STORAGE_DIR . 'plugins.yaml';
 
         if (file_exists($registeredPluginsFile)) {
             $this->registeredPlugins = include $registeredPluginsFile;

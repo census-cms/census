@@ -18,11 +18,11 @@ class Request
 	/**
 	 * Request constructor
 	 *
-	 * @param \CENSUS\Core\Configuration $configuration
+	 * @param array $configuration
 	 * @param bool $isAuthenticated
 	 * @throws \CENSUS\Core\Exception
 	 */
-    public function __construct($configuration, $isAuthenticated)
+    public function __construct(array $configuration, bool $isAuthenticated)
     {
         $this->configuration = $configuration;
 
@@ -36,7 +36,7 @@ class Request
 	 *
 	 * @param bool $isAuthenticated
      */
-    private function initializeRequest($isAuthenticated)
+    private function initializeRequest(bool $isAuthenticated)
     {
         $this->request = new \CENSUS\Model\Request();
 

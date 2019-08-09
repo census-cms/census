@@ -27,11 +27,11 @@ abstract class AbstractModule
 	/**
 	 * AbstractModule constructor
 	 *
-	 * @param array $configuration
-	 * @param \CENSUS\Core\View $view
 	 * @param \CENSUS\Model\Request $request
+	 * @param \CENSUS\Core\View $view
+	 * @param array $configuration
 	 */
-	public function __construct($request, $view, $configuration)
+	public function __construct(\CENSUS\Model\Request $request, \CENSUS\Core\View $view, array $configuration)
 	{
 		$this->request = $request;
 		$this->view = $view;

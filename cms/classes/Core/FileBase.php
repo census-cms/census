@@ -40,7 +40,13 @@ class FileBase
 	 */
 	private $pageContent = [];
 
-	public function __construct($basePath)
+	/**
+	 * FileBase constructor
+	 *
+	 * @param string $basePath
+	 * @throws Exception
+	 */
+	public function __construct(string $basePath)
 	{
 		$this->currentPagePath = BASE_DIR . DIRECTORY_SEPARATOR . $basePath;
 
@@ -69,10 +75,10 @@ class FileBase
 	/**
 	 * Load a config array from file
 	 *
-	 * @param $file
+	 * @param string $file
 	 * @return array
 	 */
-	protected static function loadConfigFromFile($file)
+	protected static function loadConfigFromFile(string $file)
 	{
 		return (file_exists($file)) ? include $file : [];
 	}
