@@ -40,8 +40,10 @@ class Configuration
 
 	/**
 	 * Initialize the config
+	 *
+	 * @param string $baseDir
 	 */
-	public function initializeConfiguration()
+	public function initializeConfiguration(string $baseDir)
 	{
 		$this->configArray = include $this->configFile;
 
