@@ -40,7 +40,7 @@ class Application
      *
      * @param string $baseDir
      */
-	public function __construct ($baseDir)
+	public function __construct (string $baseDir)
 	{
 		$this->initialize($baseDir);
 	}
