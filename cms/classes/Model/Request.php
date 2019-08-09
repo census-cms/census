@@ -18,6 +18,13 @@ class Request
      */
     private $arguments = [];
 
+	/**
+	 * $_POST request
+	 *
+	 * @var bool
+	 */
+	private $post = false;
+
     /**
      * Set the parameters
      *
@@ -88,5 +95,25 @@ class Request
 		foreach ($arguments as $argument => $value) {
 			$this->arguments[$argument] = $value;
 		}
+	}
+
+	/**
+	 * Get $_POST request is sent
+	 *
+	 * @return bool
+	 */
+	public function getPost()
+	{
+		return $this->post;
+	}
+
+	/**
+	 * Set $_POST request is sent
+	 *
+	 * @param bool $isset
+	 */
+	public function setPost(bool $isset)
+	{
+		$this->post = $isset;
 	}
 }

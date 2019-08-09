@@ -58,6 +58,7 @@ class Application
 		$this->configuration->initializeConfiguration($baseDir);
 
 		$this->initializeRequest();
+		$this->initializeFormhandler();
 		$this->initializeView();
 		$this->initializeController();
 		$this->initializeModule();
@@ -72,6 +73,13 @@ class Application
 	private function initializeRequest()
 	{
 		$this->request = (new \CENSUS\Core\Request($this->configuration->getConfig(), $this->session->isAuthenticated()))->getRequest();
+	}
+
+	private function initializeFormhandler()
+	{
+		if (true === $this->request->getPost()) {
+			$this->formhandler = new \CENSUS\Core\Form\Handler($this->request);
+		}
 	}
 
 	/**

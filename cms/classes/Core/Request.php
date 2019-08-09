@@ -44,6 +44,10 @@ class Request
         $this->request->setArguments($_REQUEST);
 
 		$this->request->set(['isAuthenticated' => $isAuthenticated]);
+
+		if (isset($_POST) && !empty($_POST)) {
+			$this->request->setPost(true);
+		}
     }
 
 	/**
