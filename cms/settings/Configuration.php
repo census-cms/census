@@ -8,6 +8,7 @@
 
 define('BASE_DIR', $baseDir . DIRECTORY_SEPARATOR);
 define('CONFIG_DIR', __DIR__ . DIRECTORY_SEPARATOR);
+define('PAGE_DIR', realpath(BASE_DIR . 'page') . DIRECTORY_SEPARATOR);
 define('STORAGE_DIR', realpath(BASE_DIR . 'storage') . DIRECTORY_SEPARATOR);
 define('PLUGIN_DIR', realpath(STORAGE_DIR . 'plugins') . DIRECTORY_SEPARATOR);
 define('TEMPLATE_DIR', realpath(CONFIG_DIR . '../templates') . DIRECTORY_SEPARATOR);

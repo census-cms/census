@@ -9,7 +9,7 @@
 		<h3>Module::page:edit <em></em></h3>
 		<form method="post">
 			<fieldset>
-				{% include 'partials/form/input.html' with {'type': 'text', 'label': 'Title', 'id': 'pageTitle', 'name': 'page[title]', 'value': pageData.realname} %}
+				{% include 'partials/form/input.html' with {'type': 'text', 'label': 'Title', 'id': 'pageTitle', 'name': 'page[realname]', 'value': pageData.realname} %}
 				{% include 'partials/form/textarea.html' with {'label': 'Description', 'id': 'pageDescription', 'name': 'page[description]', 'value': pageData.description} %}
 
 			{% if pageData.root %}
