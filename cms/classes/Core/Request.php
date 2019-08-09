@@ -80,7 +80,7 @@ class Request
 				]
 			);
 		} else {
-			if (null == $this->request->getArgument('cmd')) {
+			if (null === $this->request->getArgument('cmd')) {
 				$this->request->set(
 					[
 						'cmd' => 'backend',
@@ -89,7 +89,10 @@ class Request
 				);
 			}
 
-			if (null == $this->request->getArgument('mod')) {
+			if (
+				null === $this->request->getArgument('mod') &&
+				null === $this->request->getArgument('cmd')
+			) {
 				$this->request->set(
 					[
 						'cmd' => 'backend',
