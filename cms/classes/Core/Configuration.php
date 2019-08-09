@@ -55,7 +55,7 @@ class Configuration
      */
 	private function mergeUserConfiguration()
     {
-        $userConfigurationFile = BASE_DIR . '/config.php';
+        $userConfigurationFile = STORAGE_DIR . 'config.php';
 
         if (file_exists($userConfigurationFile)) {
             $userConfiguration = include $userConfigurationFile;
