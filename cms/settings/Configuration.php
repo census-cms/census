@@ -39,5 +39,15 @@ return [
 	],
     'session' => [
         'expires' => '3600*2'
-    ]
+    ],
+	'security' => [
+		'password' => [
+			'algorithm' => PASSWORD_ARGON2I,
+			'options' => [
+				'memory_cost' => 2048,
+				'time_cost' => 4,
+				'threads' => 3
+			]
+		]
+	]
 ];
