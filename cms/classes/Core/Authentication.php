@@ -5,7 +5,6 @@ namespace CENSUS\Core;
  * Class Authentication
  *
  * @package CENSUS\Core
- * @todo add counter for wrong user/password requests and set session to deniy authentication for n:seconds
  */
 class Authentication
 {
@@ -29,13 +28,6 @@ class Authentication
      * @var bool
      */
     private $isValid = false;
-
-	/**
-	 * Authentication is locked
-	 *
-	 * @var bool
-	 */
-    private $isLocked = false;
 
     /**
      * Error
@@ -69,7 +61,11 @@ class Authentication
 		if (true === $this->validateFormRequest()) {
 			$localUserData = $this->getUserData();
 
-			if (false !== $localUserData && $localUserData['name'] == $this->request->getArgument('user') && true === $this->verifyPassword($this->request->getArgument('password'))) {
+			if (
+				false !== $localUserData &&
+				$localUserData['name'] == $this->request->getArgument('user') &&
+				true === $this->verifyPassword($localUserData['ptoken'])
+			) {
 				unset ($localUserData['ptoken']);
 
 				$this->setIsValid(true);
@@ -134,10 +130,7 @@ class Authentication
 	 */
     private function verifyPassword(string $password)
 	{
-		// @todo must be copied also into the user create
-		$hash = password_hash($this->request->getArgument('password'), PASSWORD_ARGON2I, ['memory_cost' => 2048, 'time_cost' => 4, 'threads' => 3]);
-
-		return password_verify($password, $hash);
+		return password_verify($this->request->getArgument('password'), $password);
 	}
 
 	/**
@@ -259,7 +252,7 @@ class Authentication
     {
         $_SESSION['censuscms'] = [
 			'name' => $userData['name'],
-			'role' => (true === $userData['admin']) ? 'admin' : $userData['role'],
+			'role' => $userData['role'],
 			'data' => $userData['data'],
 			'login' => $this->loginTime,
 			'identifier' => $this->getHash($this->loginTime . $_SERVER['REMOTE_ADDR'])
