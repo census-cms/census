@@ -1,0 +1,11 @@
+<div class="form-row">
+	<label for="{{ id }}">{{ label }}</label>
+
+	{% if type == 'text' or type == 'submit' %}
+	<input type="{{ type }}" name="{{ name }}" id="{{ id }}"{% if value %} value="{{ value }}"{% endif %}{% if placeholder %} placeholder="{{ placeholder }}"{% endif %} />
+	{% endif %}
+
+	{% if type == 'radio' or type == 'checkbox' %}
+	<input type="{{ type }}" name="{{ name }}" id="{{ id }}" {% if value %}value="{{ value }}"{% endif %}{{ checked }}/>
+	{% endif %}
+</div>
