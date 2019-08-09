@@ -1,0 +1,24 @@
+{% extends 'layouts/backend.html' %}
+
+{% block pagetitle %}Module::page:edit{% endblock%}
+
+{% block main %}
+	{% include 'partials/pagetree.html' %}
+
+	<div class="cms__body">
+		<h3>Module::page:add <em></em></h3>
+		<form method="post">
+			<fieldset>
+				{% include 'partials/form/input.html' with {'type': 'text', 'label': 'Title', 'id': 'pageTitle', 'name': 'page_new[title]', 'value': pageData.realname} %}
+				{% include 'partials/form/textarea.html' with {'label': 'Description', 'id': 'pageDescription', 'name': 'page_new[description]', 'value': pageData.description} %}
+
+			{% if pageData.root %}
+				{% include 'partials/form/input.html' with {'type': 'checkbox', 'label': 'Is Root', 'id': 'pageRoot', 'name': 'page_new[root]', 'value': pageData.root, 'checked': 1} %}
+			{% else %}
+				{% include 'partials/form/input.html' with {'type': 'checkbox', 'label': 'Is Root', 'id': 'pageRoot', 'name': 'page_new[root]'} %}
+			{% endif %}
+				{% include 'partials/form/button.html' with {'name': 'page_new[save]', 'label': 'Save'} %}
+			</fieldset>
+		</form>
+	</div>
+{% endblock %}

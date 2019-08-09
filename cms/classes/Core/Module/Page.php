@@ -48,12 +48,13 @@ class Page extends AbstractModule
 
 	}
 
-	/**
-	 * Add context
-	 * Adds new pages
-	 */
-	protected function addContext()
+	protected function contentContext()
 	{
+		$this->view->assign(
+			[
+				'pageData' => $this->getPageData()
+			]
+		);
 	}
 
 	/**
@@ -62,20 +63,34 @@ class Page extends AbstractModule
 	 */
 	protected function editContext()
 	{
-		$pagePath = $this->getPagePath();
-
-		$pageData = $this->pageRepository->getData($pagePath);
-
-		// @todo add content data
-
 		$this->view->assign(
 			[
-				'pageData' => $pageData
+				'pageData' => $this->getPageData()
 			]
 		);
 	}
 
+	/**
+	 * Add context
+	 * Adds new pages
+	 */
+	protected function addContext()
+	{
+	}
 
+
+
+
+	/**
+	 * Get current page data
+	 *
+	 * @return array|null
+	 */
+	private function getPageData()
+	{
+		$pagePath = $this->getPagePath();
+		return $this->pageRepository->getData($pagePath);
+	}
 
 	/**
 	 * Get the current page path in page tree

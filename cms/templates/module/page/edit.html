@@ -9,18 +9,15 @@
 		<h3>Module::page:edit <em></em></h3>
 		<form method="post">
 			<fieldset>
-				<div class="form-row">
-					<label for="pageTitle">Title</label>
-					<input type="text" name="page[title]" id="pageTitle"{% if pageData.realname %} value="{{ pageData.realname }}"{% endif %} />
-				</div>
-				<div class="form-row">
-					<label for="pageDescription">Description</label>
-					<textarea name="page[description]" id="pageDescription">{% if pageData.description %}{{ pageData.description }}{% endif %}</textarea>
-				</div>
-				<div class="form-row">
-					<label for="pageRoot">Is Root</label>
-					<input type="checkbox" name="page[root]" id="pageRoot"{% if pageData.root %} checked="checked"{% endif %} />
-				</div>
+				{% include 'partials/form/input.html' with {'type': 'text', 'label': 'Title', 'id': 'pageTitle', 'name': 'page[title]', 'value': pageData.realname} %}
+				{% include 'partials/form/textarea.html' with {'label': 'Description', 'id': 'pageDescription', 'name': 'page[description]', 'value': pageData.description} %}
+
+			{% if pageData.root %}
+				{% include 'partials/form/input.html' with {'type': 'checkbox', 'label': 'Is Root', 'id': 'pageRoot', 'name': 'page[root]', 'value': pageData.root, 'checked': 1} %}
+			{% else %}
+				{% include 'partials/form/input.html' with {'type': 'checkbox', 'label': 'Is Root', 'id': 'pageRoot', 'name': 'page[root]'} %}
+			{% endif %}
+				{% include 'partials/form/button.html' with {'name': 'page[save]', 'label': 'Save'} %}
 			</fieldset>
 		</form>
 	</div>
