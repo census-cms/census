@@ -6,6 +6,6 @@
 	{% endif %}
 
 	{% if type == 'radio' or type == 'checkbox' %}
-	<input type="{{ type }}" name="{{ name }}" id="{{ id }}" {% if value %}value="{{ value }}"{% endif %}{{ checked }}/>
+	<input type="{{ type }}" name="{{ name }}" id="{{ id }}" {% if value %}value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}/>
 	{% endif %}
 </div>
