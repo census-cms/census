@@ -35,11 +35,11 @@ class PageRepository extends AbstractRepository
 	 */
 	public function getData(string $path)
 	{
-		$file = $path . 'meta.json';
+		$file = $path . 'meta.yaml';
 		$data = null;
 
 		if (file_exists($file)) {
-			$data = \CENSUS\Core\Helper\Utils::getJsonToArray(file_get_contents($file));
+			$data = \CENSUS\Core\Helper\Yaml::parseFile($file);
 		}
 
 		return $data;
