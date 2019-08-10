@@ -18,11 +18,18 @@ class Page extends AbstractModule
 	private $pageRepository = null;
 
 	/**
-	 * Contains information if a page in the tree is selected
+	 * Content repository
 	 *
-	 * @var array
+	 * @var \CENSUS\Core\Repository\ContentRepository
 	 */
-	private $selectedPage = [];
+	private $contentRepository = null;
+
+	/**
+	 * The current page path selected in tree
+	 *
+	 * @var string
+	 */
+	private $currentPath = '';
 
 	/**
 	 * Initialize the module
@@ -30,10 +37,13 @@ class Page extends AbstractModule
 	protected function initializeModule()
 	{
 		$this->pageRepository = new \CENSUS\Core\Repository\PageRepository($this->configuration['pagetreeRoot']);
+		$this->contentRepository = new \CENSUS\Core\Repository\ContentRepository();
+
+		$this->currentPath = $this->pageRepository->getPagePath($this->request->getArgument('parent'), $this->request->getArgument('dir'));
 
 		$this->view->assign(
 			[
-				'pagetree' => $this->pageRepository->getTree(),
+				'pagetree' => $this->pageRepository->getPageTree(),
 				'currentDir' => $this->request->getArgument('dir')
 			]
 		);
@@ -41,20 +51,21 @@ class Page extends AbstractModule
 
 	/**
 	 * Index context
-	 * Lists the page tree
+	 * Lists the page tree and content
 	 */
 	protected function indexContext()
 	{
-
+		$this->view->assign(
+			[
+				'pageData' => $this->pageRepository->getPageData($this->currentPath),
+				'contentData' => $this->contentRepository->getPreview($this->currentPath)
+			]
+		);
 	}
 
 	protected function contentContext()
 	{
-		$this->view->assign(
-			[
-				'pageData' => $this->getPageData()
-			]
-		);
+
 	}
 
 	/**
@@ -65,7 +76,7 @@ class Page extends AbstractModule
 	{
 		$this->view->assign(
 			[
-				'pageData' => $this->getPageData()
+				'pageData' => $this->pageRepository->getPageData($this->currentPath)
 			]
 		);
 	}
@@ -76,32 +87,5 @@ class Page extends AbstractModule
 	 */
 	protected function addContext()
 	{
-	}
-
-
-
-
-	/**
-	 * Get current page data
-	 *
-	 * @return array|null
-	 */
-	private function getPageData()
-	{
-		$pagePath = $this->getPagePath();
-		return $this->pageRepository->getData($pagePath);
-	}
-
-	/**
-	 * Get the current page path in page tree
-	 *
-	 * @return string
-	 */
-	private function getPagePath()
-	{
-		$parent = (null !== $this->request->getArgument('parent')) ? urldecode($this->request->getArgument('parent')) : '';
-		$dir = $this->request->getArgument('dir');
-
-		return realpath(BASE_DIR . 'page/' . $parent . DIRECTORY_SEPARATOR . $dir) . DIRECTORY_SEPARATOR;
 	}
 }

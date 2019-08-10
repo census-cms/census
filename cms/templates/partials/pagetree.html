@@ -4,7 +4,7 @@
 	<ul>
 		{% for page in pagetree %}
 		<li{% if currentDir and currentDir == page.dir %} class="current"{% endif %}{% if page.root %} data-root="1"{% endif %}>
-			<a href="?mod=page&context=content&dir={{ page.dir }}&parent={{ page.parent | url_encode}}">{{ page.realname }}</a>
+			<a href="?mod=page&context=index&dir={{ page.dir }}&parent={{ page.parent | url_encode}}">{{ page.realname }}</a>
 			{% include 'partials/pagetree/loop.html' with {'pages': page._sub, 'currentDir': currentDir} only %}
 		</li>
 		{% endfor %}

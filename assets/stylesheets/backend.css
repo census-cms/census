@@ -199,4 +199,32 @@ nav:not(.pagetree) > ul > li > ul > li a:before {
   padding-left: 20px;
 }
 
+.page__content-preview {
+  background: #efefef;
+  border: 1px solid #ccc;
+  margin: 0 0 15px 0;
+  padding: 15px;
+}
+
+.page__content-preview h1,
+.page__content-preview h2,
+.page__content-preview h3,
+.page__content-preview h4,
+.page__content-preview h5,
+.page__content-preview h6 {
+  margin: 0 0 10px;
+}
+
+.page__content-preview p {
+  margin: 0;
+}
+
+.is-disabled {
+  opacity: 0.4;
+}
+
+.is-disabled:hover {
+  opacity: 0.6;
+}
+
 /*# sourceMappingURL=backend.css.map */

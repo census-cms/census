@@ -1,0 +1,31 @@
+.page {
+	&__content {
+		&-preview {
+			background: $grey-ultra-light;
+			border: 1px solid $grey-light;
+			margin: 0 0 $space-medium 0;
+			padding: $space-medium;
+
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				margin: 0 0 $space-small;
+			}
+
+			p {
+				margin: 0;
+			}
+		}
+	}
+}
+
+.is-disabled {
+	opacity: 0.4;
+
+	&:hover {
+		opacity: 0.6;
+	}
+}

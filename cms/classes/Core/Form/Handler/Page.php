@@ -65,11 +65,17 @@ class Page
 	{
 		$data = $this->handler->getPostData();
 
-		return [
+		$metaArray = [
 			'dir' => $this->handler->getRequest()->getArgument('dir'),
 			'parent' => $this->handler->getRequest()->getArgument('parent'),
 			'realname' => $data['realname'],
 			'description' => $data['description']
 		];
+
+		if ($data['root']) {
+			$metaArray['root'] = 'true';
+		}
+
+		return $metaArray;
 	}
 }

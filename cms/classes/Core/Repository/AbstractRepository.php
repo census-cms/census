@@ -11,7 +11,7 @@ namespace CENSUS\Core\Repository;
 abstract class AbstractRepository
 {
 	/**
-	 * @var \CENSUS\Core\Model\AbstractModel;
+	 * @var \CENSUS\Model\AbstractModel;
 	 */
 	private $model = null;
 

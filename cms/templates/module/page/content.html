@@ -8,21 +8,8 @@
 	<div class="cms__body">
 		<h3>Module::page</h3>
 
-		<dl>
-			<dt>Title: </dt><dd>{{ pageData.realname }}</dd>
-			<dt>Description: </dt><dd>{{ pageData.description }}</dd>
-			<dt>Is site root: </dt><dd>{% if pageData.root %}YES{% else %}NO{% endif %}</dd>
-		</dl>
-
 		<p>
-			<a href="?mod=page&context=edit&dir={{ pageData.dir }}&parent={{ pageData.parent | url_encode}}">Edit page</a> |
-			<a href="?mod=page&context=add&dir={{ pageData.dir }}&parent={{ pageData.parent | url_encode}}">Add new page</a>
+			edit page content
 		</p>
-
-		<hr />
-
-		<div class="page__content">
-			<h6>Page Content</h6>
-		</div>
 	</div>
 {% endblock %}

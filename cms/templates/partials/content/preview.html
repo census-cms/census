@@ -1,0 +1,13 @@
+<div class="page__content-preview{% if element.active == 0 %} is-disabled{% endif %}">
+	<div class="toolbar">
+		<a href="#">Edit</a> |
+		{% if element.active == 0 %}
+		<a href="#">Show</a> |
+		{% else %}
+		<a href="#">Hide</a> |
+		{% endif %}
+		<a href="#">Delete</a>
+	</div>
+	<h4>{{ element.header }}</h4>
+	<p>{{ element.teaser }}</p>
+</div>

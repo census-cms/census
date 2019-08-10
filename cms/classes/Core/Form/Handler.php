@@ -41,7 +41,7 @@ class Handler
 	{
 		$postKeys = array_keys($_POST);
 
-		if (count($postKeys) > 1) {
+		if (count($postKeys) > 1 && !isset($_POST['auth'])) {
 			throw new \CENSUS\Core\Exception('Mixed form data in field names, form must contain only one namespace', \CENSUS\Core\Exception::ERR_INVALID);
 		}
 
