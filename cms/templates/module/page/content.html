@@ -8,8 +8,27 @@
 	<div class="cms__body">
 		<h3>Module::page</h3>
 
+		<form>
+			{% if contentData.active %}
+			{% include 'partials/form/input.html' with {'type': 'checkbox', 'label': 'Inactive', 'id': 'contentInactive', 'name': 'content[inactive]'} %}
+			{% else %}
+			{% include 'partials/form/input.html' with {'type': 'checkbox', 'label': 'Inactive', 'id': 'contentInactive', 'name': 'content[inactive]', 'value': contentData.active, 'checked': 1} %}
+			{% endif %}
+			{% include 'partials/form/input.html' with {'type': 'text', 'label': 'Title', 'id': 'contentTitle', 'name': 'content[title]', 'value': contentData.header} %}
+
+			<div class="hidden-field">
+				<textarea name="content[html]" id="quilljsTarget">{{ contentData.html }}</textarea>
+			</div>
+		</form>
+
 		<p>
-			edit page content
+			Content
 		</p>
+
+		<div class="cms__editor">
+			<div id="quilljs">
+				{{ contentData.html | raw }}
+			</div>
+		</div>
 	</div>
 {% endblock %}

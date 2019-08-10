@@ -25,8 +25,8 @@
 		<div class="page__content">
 			<h6>Page Content</h6>
 
-			{% for element in contentData %}
-			{% include 'partials/content/preview.html' with {content: element} %}
+			{% for index, element in contentData %}
+			{% include 'partials/content/preview.html' with {index: index, content: element, dir: pageData.dir, parent: pageData.parent} %}
 			{% endfor %}
 		</div>
 		{% else %}

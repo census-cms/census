@@ -65,7 +65,14 @@ class Page extends AbstractModule
 
 	protected function contentContext()
 	{
+		$type = $this->request->getArgument('type');
+		$index = $this->request->getArgument('index');
 
+		$this->view->assign(
+			[
+				'contentData' => $this->contentRepository->getContent($this->currentPath, $type, $index)
+			]
+		);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <div class="page__content-preview{% if element.active == 0 %} is-disabled{% endif %}">
 	<div class="toolbar">
-		<a href="#">Edit</a> |
+		<a href="?mod=page&context=content&dir={{ pageData.dir }}&parent={{ pageData.parent | url_encode}}&type={{ element.type }}&index={{ index }}">Edit</a> |
 		{% if element.active == 0 %}
 		<a href="#">Show</a> |
 		{% else %}
